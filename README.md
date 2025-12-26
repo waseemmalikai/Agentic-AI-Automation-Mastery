@@ -1,11 +1,6 @@
-### Day 1: Course Launch - Introduction to Agentic AI and Automation
+### Day 1: Introduction to Agentic AI and Automation
 
-**Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Greetings and some wait for others to join.  
-- **5-30 mins**: (overview + what is Agentic AI).  
-- **30-45 mins**: Live demo + setup.  
-- **45-60 mins**: Q&A, homework announcement.  
-
+**Live Session Timing (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
 
 1. **Welcome and Course Overview**   
    - This is a complete zero-to-hero program – no prior knowledge needed. We'll go from basics to building production-level autonomous AI agents that can think, plan, and act on their own.  
