@@ -1,227 +1,190 @@
-### Day 14: OOP Continued – Instance vs Class Variables, Class Methods, Encapsulation & Special Methods
+### Day 15: Inheritance & Polymorphism – Building Hierarchies and Reusable OOP Code
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 13 + shoutouts to homework (OOP contact books, BankAccount classes with transfers).  
-- **5-25 mins**: Instance vs class variables + class methods (@classmethod) + static methods (@staticmethod).  
-- **25-45 mins**: Encapsulation (private attributes, name mangling) + special methods (__str__, __repr__, __len__, etc.).  
-- **45-55 mins**: Live project: Enhance OOP Contact Book with class variables, better printing, and validation.  
-- **55-60 mins**: Q&A, common pitfalls, homework, teaser for Day 15.
-
-#### Detailed Session Script / Talking Points
+- **0-5 mins**: Welcome + recap Day 14 + shoutouts to homework (enhanced contact books with validation, class counters, beautiful __str__, bank accounts).  
+- **5-25 mins**: Inheritance basics – single inheritance, super(), method overriding.  
+- **25-45 mins**: Multiple inheritance, polymorphism, isinstance()/issubclass().  
+- **45-55 mins**: Live project: Build a Cricket Team hierarchy (Player → Batsman/Bowler/AllRounder).  
+- **55-60 mins**: Q&A, design tips, homework, teaser for Day 16.
 
 1. **Welcome & Recap**  
-   - "Assalam-o-Alaikum everyone! Day 14 – mashAllah your OOP skills are growing fast!  
-   - Yesterday we started modeling real-world entities with classes. So many beautiful OOP contact books and bank account systems with transfers – you’re already thinking like object-oriented developers!  
-   - Today: We go deeper into OOP. We’ll learn the difference between instance and class data, different types of methods, how to protect data (encapsulation), and make our objects print nicely with special methods."
+   - "Assalam-o-Alaikum everyone! Day 15 – two weeks completed, mashAllah! Your OOP code is now professional grade.  
+   - Yesterday we polished our classes with class variables, different method types, encapsulation, and special methods. Stunning contact books with validation, nice printing, total counters – and bank accounts that feel real!  
+   - Today: Inheritance and Polymorphism – the most powerful features of OOP. Inheritance lets us build hierarchies (like real life: Player → Batsman), avoid code duplication, and make code super reusable. This is heavily used in frameworks like Django models, LangChain agents, and game development."
 
-2. **Instance Variables vs Class Variables (15 mins)**  
-   New folder: `day14_oop_advanced`  
-   File: `day14_variables_methods.py`
+2. **Inheritance Basics – “is-a” Relationship (15 mins)**  
+   New folder: `day15_inheritance_polymorphism`  
+   File: `day15_inheritance.py`
 
-   - **Instance variables**: Unique to each object (what we used yesterday)
-   - **Class variables**: Shared across all objects of the class
+   - Concept: Child class (subclass) inherits attributes and methods from parent class (superclass).
 
    ```python
-   class Cricketer:
-       total_players = 0                    # class variable (shared)
-       
+   class Player:                                   # Parent/Base class
        def __init__(self, name, age):
-           self.name = name                 # instance variable
+           self.name = name.capitalize()
            self.age = age
-           Cricketer.total_players += 1     # increment shared counter
+       
+       def display_info(self):
+           print(f"Player: {self.name}, Age: {self.age}")
+       
+       def train(self):
+           print(f"{self.name} is training hard!")
+   
+   
+   class Batsman(Player):                          # Inherits from Player
+       def __init__(self, name, age, runs=0, centuries=0):
+           super().__init__(name, age)             # Call parent __init__
+           self.runs = runs
+           self.centuries = centuries
+       
+       def score_runs(self, runs):
+           self.runs += runs
+           if runs >= 100:
+               self.centuries += 1
+           print(f"{self.name} scored {runs} runs!")
+       
+       def display_info(self):                         # Override
+           super().display_info()                      # Call parent version
+           print(f"Runs: {self.runs}, Centuries: {self.centuries}")
+   
    
    # Usage
-   print(Cricketer.total_players)   # 0
-   
-   babar = Cricketer("Babar Azam", 30)
-   rizwan = Cricketer("Mohammad Rizwan", 32)
-   
-   print(Cricketer.total_players)   # 2
-   print(babar.total_players)       # 2 (accessed via instance but same value)
-   print(rizwan.total_players)      # 2
+   babar = Batsman("babar azam", 30, 5000, 15)
+   babar.display_info()
+   babar.train()                   # inherited method
+   babar.score_runs(150)
+   babar.display_info()
    ```
 
-   Real use: Tracking total contacts, bank interest rate shared by all accounts, etc.
+   Key points:
+   - `super().__init__()` to initialize parent
+   - Method overriding: Child provides its own version
+   - Child can still call parent method with `super()`
 
-3. **Different Types of Methods**  
-
-   - **Instance methods**: Take `self` – work on specific object (most common)
-   - **Class methods**: Take `cls` – work on the class itself (@classmethod)
-   - **Static methods**: No `self` or `cls` – just utility functions (@staticmethod)
+3. **More Inheritance Examples + Bowler Class (10 mins)**  
 
    ```python
-   class ContactManager:
-       total_contacts_created = 0
+   class Bowler(Player):
+       def __init__(self, name, age, wickets=0):
+           super().__init__(name, age)
+           self.wickets = wickets
        
-       def __init__(self):
-           self.contacts = {}
+       def take_wicket(self):
+           self.wickets += 1
+           print(f"{self.name} took a wicket! Total: {self.wickets}")
        
-       def add_contact(self, contact):              # instance method
-           self.contacts[contact.name] = contact
-           ContactManager.total_contacts_created += 1
-       
-       @classmethod
-       def get_total_created(cls):                  # class method
-           return cls.total_contacts_created
-       
-       @classmethod
-       def from_file(cls, filename):                # alternative constructor
-           manager = cls()                          # create new instance
-           # ... load from file logic later ...
-           return manager
-       
-       @staticmethod
-       def validate_phone(phone):                   # static utility
-           import re
-           pattern = r"^\d{11}$"                    # simple PK format
-           return bool(re.match(pattern, phone))
+       def display_info(self):
+           super().display_info()
+           print(f"Wickets: {self.wickets}")
    
-   # Usage
-   print(ContactManager.get_total_created())        # 0
    
-   # Validate without creating object
-   print(ContactManager.validate_phone("03001234567"))  # True
-   print(ContactManager.validate_phone("abc"))          # False
+   shaheen = Bowler("shaheen afridi", 25, 200)
+   shaheen.display_info()
+   shaheen.take_wicket()
+   shaheen.train()                 # inherited
    ```
 
-   - @classmethod often used for factory/alternative constructors  
-   - @staticmethod for helper functions that belong logically to the class
-
-4. **Encapsulation & Private Attributes**  
-   - Python doesn’t have true private, but convention: _single underscore = protected, __double = "private"
+4. **All-Rounder – Multiple Inheritance**  
+   - Python supports multiple inheritance (carefully!)
 
    ```python
-   class BankAccount:
-       def __init__(self, holder, balance=0):
-           self.holder = holder
-           self._balance = balance              # protected
-           self.__pin = 1234                    # "private" (name mangled)
+   class AllRounder(Batsman, Bowler):               # Inherits from both!
+       def __init__(self, name, age, runs=0, centuries=0, wickets=0):
+           Batsman.__init__(self, name, age, runs, centuries)
+           Bowler.__init__(self, name, age, wickets)
+           # Note: We called both parents explicitly
        
-       def deposit(self, amount):
-           if amount > 0:
-               self._balance += amount
-       
-       def get_balance(self):
-           return self._balance
-       
-       def change_pin(self, old, new):
-           if old == self.__pin:
-               self.__pin = new
-               print("PIN changed!")
-           else:
-               print("Wrong PIN!")
+       def display_info(self):
+           Batsman.display_info(self)              # or super() if MRO allows
+           Bowler.display_info(self)               # show both stats
    
-   acc = BankAccount("Ahmed", 5000)
-   print(acc.get_balance())         # 5000
-   print(acc._balance)              # 5000 (works, but don't do it!)
-   # print(acc.__pin)               # AttributeError
-   print(acc._BankAccount__pin)     # 1234 (name mangling – not truly private)
+   
+   shadab = AllRounder("shadab khan", 27, 2000, 2, 100)
+   shadab.display_info()
+   shadab.score_runs(80)
+   shadab.take_wicket()
+   shadab.train()
    ```
 
-   Message: Use _ for "don’t touch unless you know what you’re doing", provide getters/setters.
+   Mention Method Resolution Order (MRO): `AllRounder.mro()` to see order.
 
-5. **Special (Dunder) Methods – Make Objects Behave Nicely**  
+5. **Polymorphism – “Many Forms”**  
+   - Same method name works differently based on object type
 
    ```python
-   class Contact:
-       def __init__(self, name, phone):
-           self.name = name.capitalize()
-           self.phone = phone
-       
-       def __str__(self):                       # for print()
-           return f"{self.name} ({self.phone})"
-       
-       def __repr__(self):                      # for developers/debugging
-           return f"Contact('{self.name}', '{self.phone}')"
-       
-       def __len__(self):                       # len(obj)
-           return len(self.phone)
-       
-       def __add__(self, other):                # obj1 + obj2
-           return f"{self.name} & {other.name}"
+   def player_summary(player):                     # works for any Player subclass
+       player.display_info()                       # polymorphic call
    
-   c1 = Contact("ali", "03001234567")
-   c2 = Contact("sara", "03331234567")
+   players = [
+       Batsman("rizwan", 32, 3000, 5),
+       Bowler("haris rauf", 28, 150),
+       AllRounder("imad wasim", 35, 1500, 1, 80)
+   ]
    
-   print(c1)                    # Ali (03001234567)   thanks to __str__
-   print([c1, c2])              # [Contact('Ali', '...'), ...]   __repr__
-   print(len(c1))               # 11
-   print(c1 + c2)               # Ali & Sara
+   for p in players:
+       player_summary(p)                           # same function, different output!
+       p.train()                                   # all can train
    ```
 
-   Other useful: __eq__, __lt__ (for sorting), __getitem__ (for indexing)
+   - Built-in checks:
+     ```python
+     print(isinstance(babar, Batsman))      # True
+     print(isinstance(babar, Player))       # True (inheritance chain)
+     print(issubclass(Batsman, Player))     # True
+     ```
 
-6. **Live Project: Enhanced OOP Contact Book**  
-   Update our Contact and ContactManager:
+6. **Live Project: Cricket Team Management System**  
+   Bring it all together:
 
    ```python
-   import re
-   
-   class Contact:
-       def __init__(self, name, phone, email="N/A"):
-           self.name = name.capitalize()
-           if self._validate_phone(phone):
-               self.phone = phone
-           else:
-               raise ValueError("Invalid phone number!")
-           self.email = email
+   class CricketTeam:
+       def __init__(self, name):
+           self.name = name
+           self.players = []                       # list of Player objects
        
-       @staticmethod
-       def _validate_phone(phone):
-           pattern = r"^\d{11}$"
-           return bool(re.match(pattern, phone))
+       def add_player(self, player):
+           self.players.append(player)
+           print(f"{player.name} added to {self.name}")
        
-       def __str__(self):
-           return f"{self.name} | {self.phone} | {self.email}"
-       
-       def __repr__(self):
-           return f"Contact('{self.name}', '{self.phone}', '{self.email}')"
+       def team_summary(self):
+           print(f"\n--- {self.name} Team Summary ---")
+           for player in self.players:
+               player.display_info()
+           print(f"Total Players: {len(self.players)}")
    
    
-   class ContactManager:
-       total_created = 0
-       
-       def __init__(self):
-           self.contacts = {}
-       
-       def add(self, contact):
-           self.contacts[contact.name] = contact
-           ContactManager.total_created += 1
-       
-       def view_all(self):
-           print(f"\nTotal Contacts: {len(self.contacts)} "
-                 f"(Created ever: {ContactManager.total_created})")
-           for contact in self.contacts.values():
-               print(contact)    # uses __str__
+   # Create team
+   pakistan = CricketTeam("Pakistan")
    
-   # Usage
-   manager = ContactManager()
-   try:
-       c1 = Contact("Ali", "03001234567", "ali@example.com")
-       c2 = Contact("Sara", "03331234567")
-       manager.add(c1)
-       manager.add(c2)
-       manager.view_all()
-   except ValueError as e:
-       print(e)
+   pakistan.add_player(babar)
+   pakistan.add_player(shaheen)
+   pakistan.add_player(shadab)
+   
+   pakistan.team_summary()
+   
+   # Polymorphism in action
+   print("\nTraining Session:")
+   for p in pakistan.players:
+       p.train()
    ```
 
-#### Common Pitfalls
-- Forgetting @classmethod/@staticmethod decorators.  
-- Accessing class variables via self instead of ClassName.  
-- Overusing __private when _protected is enough.
+   Run live – show hierarchy, polymorphism, team management.
 
-#### Homework for Day 14
-1. Run all examples – play with __str__, class variables, validation.
-2. Fully enhance your OOP Contact Book:
-   - Add class variable for total_contacts_ever_created.
-   - Add proper __str__ and __repr__ to Contact.
-   - Add phone validation using static method.
-   - Add a class method to create Contact from string like "Ali,03001234567,ali@example.com".
-   - Use encapsulation for sensitive data (e.g., make email _protected).
-3. Bonus Project: Enhance BankAccount:
-   - Add class variable for bank_name and interest_rate.
-   - Add class method to change interest rate for all accounts.
-   - Implement __str__ and __add__ (combine balances).
-4. Comment “Day 14 Done ✅” with screenshot showing nice printing and total counter.
-5. (Advanced Bonus): Implement __eq__ so two contacts with same phone are considered equal.
+#### OOP Design Tips
+- Favor composition over inheritance when possible (has-a vs is-a).  
+- Keep inheritance depth shallow (2-3 levels max).  
+- Use inheritance for true “is-a” relationships (Batsman is a Player).  
+- Polymorphism makes code flexible – write functions that accept base class.
+
+#### Homework for Day 15
+1. Run all examples – create Player hierarchy.
+2. Build a full Cricket Team Management OOP system:
+   - Base Player class.
+   - At least Batsman, Bowler, AllRounder subclasses.
+   - Team class that holds list of players, with methods: add_player, remove_player, team_summary, training_session (calls train on all).
+   - Add a Captain designation (maybe a class variable or separate method).
+3. Bonus Project: Bank system with inheritance:
+   - Base Account → SavingsAccount (with interest), CurrentAccount (with overdraft).
+   - Bank class to manage multiple accounts.
+4. Comment “Day 15 Done ✅” with screenshot of your team summary showing different player types.
+5. (Advanced Bonus): Implement multiple inheritance carefully for a WicketKeeperBatsman class.
