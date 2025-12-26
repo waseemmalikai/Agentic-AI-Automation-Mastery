@@ -1,207 +1,227 @@
-### Day 13: Object-Oriented Programming (OOP) Basics – Classes, Objects, __init__ & Attributes
+### Day 14: OOP Continued – Instance vs Class Variables, Class Methods, Encapsulation & Special Methods
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 12 + shoutouts to homework (refactored contact books with packages, cricket stats packages).  
-- **5-20 mins**: Why OOP? Introduction to classes and objects (real-world analogy).  
-- **20-45 mins**: Defining classes, __init__, instance attributes, methods, creating objects.  
-- **45-55 mins**: Live project: Convert Contact Book to OOP (Contact class + ContactManager class).  
-- **55-60 mins**: Q&A, common mistakes, homework.
+- **0-5 mins**: Welcome + recap Day 13 + shoutouts to homework (OOP contact books, BankAccount classes with transfers).  
+- **5-25 mins**: Instance vs class variables + class methods (@classmethod) + static methods (@staticmethod).  
+- **25-45 mins**: Encapsulation (private attributes, name mangling) + special methods (__str__, __repr__, __len__, etc.).  
+- **45-55 mins**: Live project: Enhance OOP Contact Book with class variables, better printing, and validation.  
+- **55-60 mins**: Q&A, common pitfalls, homework, teaser for Day 15.
 
+#### Detailed Session Script / Talking Points
 
 1. **Welcome & Recap**  
-   - "Assalam-o-Alaikum everyone! Day 13 – Alhamdulillah we're almost two weeks in and your code is already looking professional!  
-   - Yesterday modules and packages turned our messy scripts into clean, organized projects. Amazing folder structures, reusable storage/ui modules – this is exactly how real Python projects (Django, Flask, LangChain agents) are built!  
-   - Today: We start Object-Oriented Programming (OOP). OOP is the foundation of almost all modern Python code – web frameworks, data science libraries, AI tools. It lets us model real-world entities (like a Contact, Player, AI Agent) naturally and write cleaner, more maintainable code."
+   - "Assalam-o-Alaikum everyone! Day 14 – mashAllah your OOP skills are growing fast!  
+   - Yesterday we started modeling real-world entities with classes. So many beautiful OOP contact books and bank account systems with transfers – you’re already thinking like object-oriented developers!  
+   - Today: We go deeper into OOP. We’ll learn the difference between instance and class data, different types of methods, how to protect data (encapsulation), and make our objects print nicely with special methods."
 
-2. **Why OOP? Real-World Analogy (10 mins)**  
-   - Procedural code (what we’ve done so far): Good for small scripts, but data and functions are separate → hard to manage as project grows.  
-   - OOP: Groups data + behavior together into "objects" – just like real life.
+2. **Instance Variables vs Class Variables (15 mins)**  
+   New folder: `day14_oop_advanced`  
+   File: `day14_variables_methods.py`
 
-   - Think of a **Cricketer** in real life:
-     - Properties (data): name, age, runs, average
-     - Behaviors (actions): bat(), bowl(), field(), calculate_average()
-   - In OOP, we create a blueprint (class) called `Cricketer`, then make actual players (objects) like babar = Cricketer("Babar Azam", 30)
+   - **Instance variables**: Unique to each object (what we used yesterday)
+   - **Class variables**: Shared across all objects of the class
 
-   Benefits:
-   - Reusability
-   - Easier maintenance
-   - Natural modeling
-   - Used in Flask/Django models, LangChain agents, Pygame games, etc.
-
-3. **Defining a Class & Creating Objects**  
-   New folder: `day13_oop_basics`  
-   File: `day13_classes.py`
-
-   **Basic Class Syntax**
-   ```python
-   class Cricketer:        # class name – PascalCase
-       pass                # empty class for now
-   
-   # Create objects (instances)
-   player1 = Cricketer()
-   player2 = Cricketer()
-   
-   print(player1)          # <__main__.Cricketer object at 0x...>
-   print(player2)          # different memory address
-   ```
-
-   **Adding Attributes (Data)**
    ```python
    class Cricketer:
-       pass
-   
-   babar = Cricketer()
-   babar.name = "Babar Azam"      # instance attribute
-   babar.age = 30
-   babar.runs = 5000
-   
-   rizwan = Cricketer()
-   rizwan.name = "Mohammad Rizwan"
-   rizwan.age = 32
-   rizwan.runs = 3000
-   
-   print(f"{babar.name} has {babar.runs} runs")
-   ```
-
-   Problem: We repeat this for every player → use `__init__`
-
-   **The __init__ Method – Constructor**
-   ```python
-   class Cricketer:
-       def __init__(self, name, age, runs=0):   # called automatically
-           self.name = name         # instance attribute
-           self.age = age
-           self.runs = runs
-           self.average = 0.0       # default
-   
-   # Create objects – much cleaner!
-   babar = Cricketer("Babar Azam", 30, 5000)
-   rizwan = Cricketer("Mohammad Rizwan", 32, 3000)
-   
-   print(babar.name, babar.runs)
-   ```
-
-   - `self`: Refers to the current object (required as first parameter)
-
-4. **Adding Methods (Behaviors)**  
-   ```python
-   class Cricketer:
-       def __init__(self, name, age, runs=0, matches=0):
-           self.name = name
-           self.age = age
-           self.runs = runs
-           self.matches = matches
-   
-       def display_info(self):                     # method
-           print(f"Player: {self.name}")
-           print(f"Age: {self.age}")
-           print(f"Runs: {self.runs}")
-           if self.matches > 0:
-               avg = self.runs / self.matches
-               print(f"Average: {avg:.2f}")
-           else:
-               print("Average: N/A")
+       total_players = 0                    # class variable (shared)
        
-       def add_runs(self, new_runs):               # modify data
-           self.runs += new_runs
-           self.matches += 1
-           print(f"{self.name} scored {new_runs} runs!")
+       def __init__(self, name, age):
+           self.name = name                 # instance variable
+           self.age = age
+           Cricketer.total_players += 1     # increment shared counter
    
    # Usage
-   shaheen = Cricketer("Shaheen Afridi", 25, matches=50)
-   shaheen.display_info()
+   print(Cricketer.total_players)   # 0
    
-   shaheen.add_runs(5)        # wicket maiden or something :)
-   shaheen.display_info()
+   babar = Cricketer("Babar Azam", 30)
+   rizwan = Cricketer("Mohammad Rizwan", 32)
+   
+   print(Cricketer.total_players)   # 2
+   print(babar.total_players)       # 2 (accessed via instance but same value)
+   print(rizwan.total_players)      # 2
    ```
 
-   - Methods always take `self` as first parameter
+   Real use: Tracking total contacts, bank interest rate shared by all accounts, etc.
 
-5. **Live Project: OOP Contact Book**  
-   Refactor our contact book using classes:
+3. **Different Types of Methods**  
 
-   **File: contact.py**
+   - **Instance methods**: Take `self` – work on specific object (most common)
+   - **Class methods**: Take `cls` – work on the class itself (@classmethod)
+   - **Static methods**: No `self` or `cls` – just utility functions (@staticmethod)
+
    ```python
+   class ContactManager:
+       total_contacts_created = 0
+       
+       def __init__(self):
+           self.contacts = {}
+       
+       def add_contact(self, contact):              # instance method
+           self.contacts[contact.name] = contact
+           ContactManager.total_contacts_created += 1
+       
+       @classmethod
+       def get_total_created(cls):                  # class method
+           return cls.total_contacts_created
+       
+       @classmethod
+       def from_file(cls, filename):                # alternative constructor
+           manager = cls()                          # create new instance
+           # ... load from file logic later ...
+           return manager
+       
+       @staticmethod
+       def validate_phone(phone):                   # static utility
+           import re
+           pattern = r"^\d{11}$"                    # simple PK format
+           return bool(re.match(pattern, phone))
+   
+   # Usage
+   print(ContactManager.get_total_created())        # 0
+   
+   # Validate without creating object
+   print(ContactManager.validate_phone("03001234567"))  # True
+   print(ContactManager.validate_phone("abc"))          # False
+   ```
+
+   - @classmethod often used for factory/alternative constructors  
+   - @staticmethod for helper functions that belong logically to the class
+
+4. **Encapsulation & Private Attributes**  
+   - Python doesn’t have true private, but convention: _single underscore = protected, __double = "private"
+
+   ```python
+   class BankAccount:
+       def __init__(self, holder, balance=0):
+           self.holder = holder
+           self._balance = balance              # protected
+           self.__pin = 1234                    # "private" (name mangled)
+       
+       def deposit(self, amount):
+           if amount > 0:
+               self._balance += amount
+       
+       def get_balance(self):
+           return self._balance
+       
+       def change_pin(self, old, new):
+           if old == self.__pin:
+               self.__pin = new
+               print("PIN changed!")
+           else:
+               print("Wrong PIN!")
+   
+   acc = BankAccount("Ahmed", 5000)
+   print(acc.get_balance())         # 5000
+   print(acc._balance)              # 5000 (works, but don't do it!)
+   # print(acc.__pin)               # AttributeError
+   print(acc._BankAccount__pin)     # 1234 (name mangling – not truly private)
+   ```
+
+   Message: Use _ for "don’t touch unless you know what you’re doing", provide getters/setters.
+
+5. **Special (Dunder) Methods – Make Objects Behave Nicely**  
+
+   ```python
+   class Contact:
+       def __init__(self, name, phone):
+           self.name = name.capitalize()
+           self.phone = phone
+       
+       def __str__(self):                       # for print()
+           return f"{self.name} ({self.phone})"
+       
+       def __repr__(self):                      # for developers/debugging
+           return f"Contact('{self.name}', '{self.phone}')"
+       
+       def __len__(self):                       # len(obj)
+           return len(self.phone)
+       
+       def __add__(self, other):                # obj1 + obj2
+           return f"{self.name} & {other.name}"
+   
+   c1 = Contact("ali", "03001234567")
+   c2 = Contact("sara", "03331234567")
+   
+   print(c1)                    # Ali (03001234567)   thanks to __str__
+   print([c1, c2])              # [Contact('Ali', '...'), ...]   __repr__
+   print(len(c1))               # 11
+   print(c1 + c2)               # Ali & Sara
+   ```
+
+   Other useful: __eq__, __lt__ (for sorting), __getitem__ (for indexing)
+
+6. **Live Project: Enhanced OOP Contact Book**  
+   Update our Contact and ContactManager:
+
+   ```python
+   import re
+   
    class Contact:
        def __init__(self, name, phone, email="N/A"):
            self.name = name.capitalize()
-           self.phone = phone
+           if self._validate_phone(phone):
+               self.phone = phone
+           else:
+               raise ValueError("Invalid phone number!")
            self.email = email
-   
-       def display(self):
-           print(f"\n📇 {self.name}")
-           print(f"   Phone: {self.phone}")
-           print(f"   Email: {self.email}")
-   
-       def update_phone(self, new_phone):
-           self.phone = new_phone
-           print("✅ Phone updated!")
+       
+       @staticmethod
+       def _validate_phone(phone):
+           pattern = r"^\d{11}$"
+           return bool(re.match(pattern, phone))
+       
+       def __str__(self):
+           return f"{self.name} | {self.phone} | {self.email}"
+       
+       def __repr__(self):
+           return f"Contact('{self.name}', '{self.phone}', '{self.email}')"
    
    
    class ContactManager:
+       total_created = 0
+       
        def __init__(self):
-           self.contacts = {}    # name → Contact object
-   
-       def add_contact(self, name, phone, email="N/A"):
-           if name in self.contacts:
-               print("❌ Contact already exists!")
-           else:
-               self.contacts[name] = Contact(name, phone, email)
-               print("✅ Contact added!")
+           self.contacts = {}
+       
+       def add(self, contact):
+           self.contacts[contact.name] = contact
+           ContactManager.total_created += 1
        
        def view_all(self):
-           if not self.contacts:
-               print("No contacts yet!")
-               return
-           print(f"\n📋 Total Contacts: {len(self.contacts)}")
+           print(f"\nTotal Contacts: {len(self.contacts)} "
+                 f"(Created ever: {ContactManager.total_created})")
            for contact in self.contacts.values():
-               contact.display()
-       
-       def search(self, name):
-           name = name.capitalize()
-           if name in self.contacts:
-               self.contacts[name].display()
-           else:
-               print("❌ Not found!")
-   ```
-
-   **File: main.py**
-   ```python
-   from contact import ContactManager
+               print(contact)    # uses __str__
    
+   # Usage
    manager = ContactManager()
-   
-   manager.add_contact("Ali", "03001234567", "ali@example.com")
-   manager.add_contact("Sara", "03331234567")
-   
-   manager.view_all()
-   manager.search("ali")
+   try:
+       c1 = Contact("Ali", "03001234567", "ali@example.com")
+       c2 = Contact("Sara", "03331234567")
+       manager.add(c1)
+       manager.add(c2)
+       manager.view_all()
+   except ValueError as e:
+       print(e)
    ```
 
-#### Key OOP Terms Quick Summary (Show on Screen)
-| Term              | Meaning                                      |
-|-------------------|----------------------------------------------|
-| Class             | Blueprint/template                                   |
-| Object/Instance   | Actual created entity from class             |
-| Attribute         | Data/variable inside object                  |
-| Method            | Function inside class                        |
-| self              | Reference to current object                  |
-| __init__          | Constructor – runs on object creation        |
+#### Common Pitfalls
+- Forgetting @classmethod/@staticmethod decorators.  
+- Accessing class variables via self instead of ClassName.  
+- Overusing __private when _protected is enough.
 
-#### Common Mistakes
-- Forgetting `self` as first parameter in methods.  
-- Forgetting to use `self.` when accessing attributes inside class.  
-- Creating attributes outside __init__ inconsistently.
-
-#### Homework for Day 13
-1. Run all examples – create Cricketer and Contact classes.
-2. Convert your persistent Contact Book to full OOP:
-   - Contact class (with attributes + methods like update, display).
-   - ContactManager class (with add, delete, search, save/load using previous file handling).
-   - Keep storage in separate module if you want extra credit.
-3. Bonus Project: Create a `BankAccount` class:
-   - Attributes: account_number, holder_name, balance
-   - Methods: deposit(), withdraw(), check_balance(), transfer(to_account, amount)
-   - Create multiple accounts and test transfers.
-4. Comment “Day 13 Done ✅” with screenshot of your OOP Contact Book running (show at least 2 contacts).
-5. (Advanced Bonus): Add a `Player` class for cricket with inheritance teaser (Batsman and Bowler classes coming soon).
+#### Homework for Day 14
+1. Run all examples – play with __str__, class variables, validation.
+2. Fully enhance your OOP Contact Book:
+   - Add class variable for total_contacts_ever_created.
+   - Add proper __str__ and __repr__ to Contact.
+   - Add phone validation using static method.
+   - Add a class method to create Contact from string like "Ali,03001234567,ali@example.com".
+   - Use encapsulation for sensitive data (e.g., make email _protected).
+3. Bonus Project: Enhance BankAccount:
+   - Add class variable for bank_name and interest_rate.
+   - Add class method to change interest rate for all accounts.
+   - Implement __str__ and __add__ (combine balances).
+4. Comment “Day 14 Done ✅” with screenshot showing nice printing and total counter.
+5. (Advanced Bonus): Implement __eq__ so two contacts with same phone are considered equal.
