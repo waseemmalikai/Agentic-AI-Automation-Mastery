@@ -1,176 +1,179 @@
-### Day 6: Nested Loops, Patterns & Introduction to Lists (Python’s Most Important Data Structure)
+### Day 7: Advanced List Operations, List Comprehensions & Introduction to Tuples and Sets
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 5 + shoutouts to homework (guessing game enhancements & savings calculators).  
-- **5-20 mins**: Nested loops + fun pattern printing (stars, numbers).  
-- **20-45 mins**: Introduction to Lists – creation, indexing, slicing, methods.  
-- **45-55 mins**: Combining loops + lists + live mini project.  
-- **55-60 mins**: Q&A, common mistakes, homework, teaser for Day 7.
+- **0-5 mins**: Welcome + recap Day 6 + shoutouts to homework (patterns, enhanced grocery managers with quantities and costs).  
+- **5-25 mins**: Advanced list operations (slicing tricks, comprehensions, copying pitfalls).  
+- **25-45 mins**: Tuples – immutable lists (when and why to use).  
+- **45-55 mins**: Sets – unique collections + set operations.  
+- **55-60 mins**: Q&A, mini comparison, homework.
 
-1. **Welcome & Recap**  
-   - "Assalam-o-Alaikum everyone! Day 6 – we're flying through the basics and getting stronger every day!  
-   - Yesterday loops unlocked automation power. So many creative guessing games – multiple rounds, hints, best scores – you’re already building like pros!  
-   - Today: We go deeper with nested loops (loops inside loops), print beautiful patterns, and finally meet Python Lists – the #1 data structure we'll use in every agent, database, and ML project."
+1. **Welcome & Recap (5 mins)**  
+   - "Assalam-o-Alaikum everyone! Day 7 – Alhamdulillah we’re one week in and already building real apps!  
+   - Yesterday nested loops + lists blew minds – beautiful patterns and smart grocery managers with quantities, sorting, estimated costs. You’re turning into serious coders!  
+   - Today: We master lists completely (including the super-powerful list comprehensions), then meet two new data structures: Tuples and Sets. These three (List, Tuple, Set) are the foundation for everything – databases, APIs, agent memory, ML datasets."
 
-2. **Nested Loops – Loops Inside Loops**  
-   New file: `day6_nested_lists.py`
+2. **Advanced List Operations**  
+   Continue in `day7_advanced_collections.py`
 
-   - Concept: "Outer loop runs → inner loop runs fully → outer moves to next."  
-   - Simple example:
+   - **Advanced Slicing Tricks**
      ```python
-     for i in range(1, 4):          # outer: 1,2,3
-         print(f"Outer loop iteration: {i}")
-         for j in range(1, 3):      # inner: 1,2 for each outer
-             print(f"   Inner: {j}")
+     numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+     
+     print(numbers[::2])     # even indices: [0, 2, 4, 6, 8]
+     print(numbers[::-1])    # reverse list: [9, 8, ..., 0]
+     print(numbers[1:8:3])   # start:stop:step
      ```
 
-   - **Pattern Printing – Everyone’s Favorite!**  
-     **Pattern 1: Square of Stars**
+   - **List Comprehensions – Python’s Most Elegant Feature**
+     "Short, powerful way to create/transform lists."
+     
+     Normal way:
      ```python
-     size = 5
-     for i in range(size):
-         for j in range(size):
-             print("*", end=" ")   # end=" " to stay on same line
-         print()                   # new line after row
+     squares = []
+     for i in range(1, 11):
+         squares.append(i ** 2)
      ```
-     Output: 5x5 square of stars.
-
-     **Pattern 2: Right Triangle**
+     
+     Comprehension way (one line!):
      ```python
-     n = 6
-     for i in range(1, n+1):        # rows 1 to 6
-         for j in range(i):        # print i stars
-             print("*", end=" ")
+     squares = [i ** 2 for i in range(1, 11)]
+     print(squares)
+     ```
+     
+     With condition:
+     ```python
+     even_squares = [i ** 2 for i in range(1, 11) if i % 2 == 0]
+     print(even_squares)     # [4, 16, 36, 64, 100]
+     
+     # Convert prices PKR to USD (rate 278)
+     prices_pkr = [5000, 8000, 12000, 3000]
+     prices_usd = [round(p / 278, 2) for p in prices_pkr]
+     print(prices_usd)
+     ```
+
+   - **Common Pitfall: List Copying**
+     ```python
+     list1 = [1, 2, 3]
+     list2 = list1          # NOT a copy! Both point to same list
+     list2.append(4)
+     print(list1)           # [1, 2, 3, 4] → surprise!
+     
+     # Correct ways:
+     list3 = list1.copy()          # or list1[:] or list(list1)
+     ```
+
+   - **Nested Lists (2D Lists) – Like Tables**
+     ```python
+     matrix = [
+         [1, 2, 3],
+         [4, 5, 6],
+         [7, 8, 9]
+     ]
+     print(matrix[1][2])    # 6
+     
+     # Print like table
+     for row in matrix:
+         for val in row:
+             print(val, end=" ")
          print()
      ```
 
-     **Pattern 3: Number Pyramid**
-     ```python
-     n = 5
-     for i in range(1, n+1):
-         # spaces
-         for j in range(n - i):
-             print(" ", end="")
-         # numbers
-         for j in range(1, i+1):
-             print(j, end=" ")
-         print()
-     ```
-
-3. **Introduction to Lists – The Superhero Data Structure**  
-
-   - "A list is an ordered collection that can hold anything – numbers, strings, even other lists!"  
-   - Creation:
-     ```python
-     fruits = ["apple", "banana", "mango", "orange"]
-     numbers = [10, 20, 30, 40]
-     mixed = [1, "hello", True, 3.14]
-     empty = []
-     
-     print(fruits)
-     print(type(fruits))    # <class 'list'>
-     ```
-
-   - **Indexing & Slicing** (very important)
-     ```python
-     print(fruits[0])       # "apple"  (0-based indexing)
-     print(fruits[-1])      # "orange" (negative = from end)
-     print(fruits[1:3])     # ["banana", "mango"] (slice)
-     print(fruits[:2])      # first two
-     print(fruits[2:])      # from index 2 to end
-     ```
-
-   - **Modifying Lists** (mutable!)
-     ```python
-     fruits[1] = "grapes"           # change
-     fruits.append("watermelon")    # add to end
-     fruits.insert(0, "kiwi")       # insert at position
-     fruits.remove("mango")         # remove by value
-     popped = fruits.pop()          # remove and return last
-     print(popped)
-     ```
-
-   - **Common List Methods Cheat Sheet** (show on screen)
-     | Method          | What it does                     | Example                     |
-     |-----------------|----------------------------------|-----------------------------|
-     | append()        | Add to end                       | list.append("new")          |
-     | extend()        | Add multiple                     | list.extend(["a","b"])      |
-     | insert()        | Insert at index                  | list.insert(0, "first")     |
-     | remove()        | Remove first occurrence          | list.remove("item")         |
-     | pop()           | Remove and return by index       | list.pop(2)                 |
-     | index()         | Find position                    | list.index("item")          |
-     | count()         | Count occurrences                | list.count("item")          |
-     | sort()          | Sort in place                    | list.sort()                 |
-     | reverse()       | Reverse in place                 | list.reverse()              |
-     | len()           | Length                           | len(list)                   |
-
-   - **Looping Through Lists**
-     ```python
-     shopping = ["rice", "oil", "sugar", "flour"]
-     
-     for item in shopping:
-         print(f"Buy {item}")
-     
-     for i in range(len(shopping)):
-         print(f"{i+1}. {shopping[i]}")
-     ```
-
-4. **Mini Project Live Build: Grocery List Manager**  
-
+3. **Tuples – Immutable Sequences (15 mins)**  
+   - "Tuples are like lists but cannot be changed – perfect for fixed data."
+   
+   Creation:
    ```python
-   print("🛍️  Smart Grocery List Manager\n")
+   coordinates = (24.8607, 67.0011)   # Karachi lat, long
+   fruits = ("apple", "banana", "mango")
+   single = (42,)                     # note comma for single item
+   empty = ()
    
-   grocery = []
-   
-   while True:
-       print("\nOptions: 1=Add, 2=Remove, 3=View, 4=Clear, 5=Exit")
-       choice = input("Choose: ")
-       
-       if choice == "1":
-           item = input("Enter item: ").strip()
-           if item:
-               grocery.append(item.capitalize())
-               print(f"✅ {item} added!")
-       elif choice == "2":
-           item = input("Remove item: ").strip()
-           if item in grocery:
-               grocery.remove(item.capitalize())
-               print("❌ Removed!")
-           else:
-               print("Not in list!")
-       elif choice == "3":
-           if grocery:
-               print("\n🛒 Your Grocery List:")
-               for i, item in enumerate(grocery, 1):
-                   print(f"   {i}. {item}")
-               print(f"Total items: {len(grocery)}")
-           else:
-               print("List is empty!")
-       elif choice == "4":
-           grocery.clear()
-           print("🗑️  List cleared!")
-       elif choice == "5":
-           print("Thanks for using! See you at the market!")
-           break
-       else:
-           print("Invalid choice!")
-   
-   # Bonus: Save for tomorrow (we'll add file handling later)
+   print(type(coordinates))           # <class 'tuple'>
    ```
 
-   Run live – add/remove items, show how powerful lists + loops are.
+   - Why use tuples?
+     - Faster than lists
+     - Safe (can't accidentally modify)
+     - Can be used as dictionary keys (later)
+     - Function returns multiple values as tuple
 
-#### Common Mistakes
-- Forgetting `end=" "` in print for patterns → stars go vertical.  
-- IndexError: list index out of range.  
-- Using `==` instead of `in` for checking existence.
+   - Operations (similar to lists but no modification)
+     ```python
+     print(fruits[1])       # "banana"
+     print(fruits.count("apple"))
+     print(fruits.index("mango"))
+     
+     # Unpacking – super useful!
+     lat, long = coordinates
+     print(f"Latitude: {lat}, Longitude: {long}")
+     
+     # Swap variables easily
+     a = 10
+     b = 20
+     a, b = b, a
+     print(a, b)            # 20 10
+     ```
 
-#### Homework for Day 6
-1. Print at least 3 different patterns (triangle, square, pyramid, diamond).
-2. Build an enhanced Grocery Manager:
-   - Add quantity: store as list of lists or dicts (e.g., ["Rice", 5], ["Oil", 2]).
-   - Show total estimated cost (assign fake prices).
-   - Sort list alphabetically.
-3. Alternative: Create a Cricketer scorecard list and calculate average runs.
-4. Comment “Day 6 Done ✅” with screenshot of your pattern + grocery manager.
-5. (Bonus): Print Floyd's Triangle (1, 2 3, 4 5 6, etc.).
+4. **Sets – Unique Unordered Collections (10 mins)**  
+   - "Sets store unique items only – great for removing duplicates, membership testing, math operations."
+   
+   Creation:
+   ```python
+   unique_numbers = {1, 2, 2, 3, 3, 4}   # duplicates removed → {1,2,3,4}
+   empty_set = set()                    # {} is dict, not set!
+   
+   fruits_set = {"apple", "banana", "mango"}
+   ```
+
+   - Key features:
+     - No duplicates
+     - No indexing (unordered)
+     - Very fast lookup
+
+   - Common methods:
+     ```python
+     fruits_set.add("orange")
+     fruits_set.remove("banana")          # error if not exists
+     fruits_set.discard("grapes")         # safe remove
+     
+     print("apple" in fruits_set)         # True – very fast!
+     ```
+
+   - Set operations (like math):
+     ```python
+     set_a = {1, 2, 3, 4}
+     set_b = {3, 4, 5, 6}
+     
+     print(set_a | set_b)     # union: {1,2,3,4,5,6}
+     print(set_a & set_b)     # intersection: {3,4}
+     print(set_a - set_b)     # difference: {1,2}
+     print(set_a ^ set_b)     # symmetric difference: {1,2,5,6}
+     ```
+
+5. **Quick Comparison Table (Show on Screen)**
+   | Feature         | List              | Tuple             | Set                  |
+   |-----------------|-------------------|-------------------|----------------------|
+   | Mutable         | Yes               | No                | Yes                  |
+   | Duplicates      | Yes               | Yes               | No                   |
+   | Ordered         | Yes               | Yes               | No                   |
+   | Indexing        | Yes               | Yes               | No                   |
+   | Use case        | Ordered data      | Fixed records     | Unique items, math   |
+
+#### Mini Project Idea (If Time)
+Remove duplicates from a list using set.
+```python
+ messy = [1, 2, 2, 3, 3, 4, 1, 5]
+ clean = list(set(messy))
+ print(clean)   # order may vary
+```
+
+#### Homework for Day 7
+1. Practice all examples.
+2. Build a "Cricket Team Manager":
+   - Use list for players (with names).
+   - Use set for unique skills (e.g., "batting", "bowling").
+   - Use tuple for fixed player info (name, age, role).
+   - Features: Add player, show unique skills, find common skills between two teams.
+3. Alternative: Create a currency converter using list comprehensions for multiple amounts.
+4. Comment “Day 7 Done ✅” with screenshot of your team manager or unique skills output.
+5. (Bonus): Use list comprehension to generate first 20 Fibonacci numbers.
