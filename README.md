@@ -1,151 +1,163 @@
-### Day 3: Python Fundamentals – Variables, Data Types, and Basic Operations
+### Day 4: Control Flow – Conditional Statements (if, elif, else) & Comparison Operators
 
-**Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 2 + shoutouts to homework (especially screenshots of goal tracker).  
-- **5-20 mins**:  What are variables, naming rules, and basic data types.  
-- **20-45 mins**: Live coding + interactive examples (numbers, strings, booleans).  
-- **45-55 mins**: Basic operations (arithmetic, string concatenation, type conversion).  
-- **55-60 mins**: Q&A, common mistakes, homework.
+**Live Session Timings (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
+- **0-5 mins**: Welcome + recap Day 3 + shoutouts to homework (budget calculator screenshots – highlight creative ones).  
+- **5-20 mins**: Theory – Comparison operators + logical operators.  
+- **20-45 mins**: if / elif / else deep dive with live examples.  
+- **45-55 mins**: Nested conditions + mini project.  
+- **55-60 mins**: Q&A, common errors, homework.
 
 
-1. **Welcome & Quick Recap (5 mins)**  
-   - "Assalam-o-Alaikum ! Day 3 of our Agentic AI Mastery Course – great to see so many of you back!  
-   - Yesterday we nailed Python installation, virtual environments,
-   - Amazing homework submissions! I saw many customized versions with extra advice – keep it up!  
-   - Today: We start actual Python programming. Variables, data types, and operations – the building blocks of every agent we’ll build."
+1. **Welcome & Recap (5 mins)**  
+   - "Assalam-o-Alaikum everyone!  
+   - Yesterday we mastered variables, data types, and operations. Many of you built awesome budget calculators with percentages and motivational messages – fantastic work!  
+   - Today: We make our programs SMART. We teach Python how to make decisions using conditional statements – the brain of every agent we'll build later."
 
-2. **What is a Variable? (Theory – 8 mins)**  
-   - "A variable is like a labeled box where you store something (data). You can change what’s inside anytime."  
-   - Example:  
-     ```python
-     name = "Ahmed"        # box labeled 'name' contains "Ahmed"
-     age = 25              # box labeled 'age' contains 25
-     ```  
-   - Rules for naming variables (very important – show common errors):  
-     | Rule                  | Good Example       | Bad Example          | Why Bad?                  |
-     |-----------------------|--------------------|----------------------|---------------------------|
-     | Start with letter or _| user_name          | 1name                | Can't start with number   |
-     | Letters, numbers, _   | total_price_2025   | total-price          | No hyphens                |
-     | Case-sensitive        | Age vs age         |                      | Different variables       |
-     | No Python keywords    | class = 10         | (error)              | 'class' is reserved       |
-     | Meaningful names      | monthly_salary     | ms                   | Hard to read later        |
+2. **Comparison Operators – The Foundation of Decisions**  
+   Show in new file: `day4_conditions.py`
 
-   - Best practice: Use snake_case (lowercase with underscores) – standard in Python.
+   | Operator | Meaning              | Example            | Result    |
+   |----------|----------------------|--------------------|-----------|
+   | ==       | Equal to             | 10 == 10           | True      |
+   | !=       | Not equal            | 10 != 5            | True      |
+   | >        | Greater than         | 15 > 10            | True      |
+   | <        | Less than            | 5 < 10             | True      |
+   | >=       | Greater or equal     | 10 >= 10           | True      |
+   | <=       | Less or equal        | 8 <= 10            | True      |
 
-3. **Basic Data Types**  
-   Create a new file: `day3_datatypes.py`
+   Live demo:
+   ```python
+   age = 20
+   print(age == 20)    # True
+   print(age > 18)     # True
+   print(age != 25)    # True
+   ```
 
-   - **Integers (int)** – whole numbers  
-     ```python
-     age = 22
-     siblings = 4
-     print(age, type(age))          # <class 'int'>
-     ```
+   Important: `==` vs `=` (assignment) – most common beginner mistake!
 
-   - **Floats (float)** – decimal numbers  
-     ```python
-     height = 5.9
-     salary = 85000.50
-     print(height, type(height))     # <class 'float'>
-     ```
+3. **Logical Operators – Combining Conditions**  
+   | Operator | Meaning              | Example                        | Result    |
+   |----------|----------------------|--------------------------------|-----------|
+   | and      | Both true            | (age > 18) and (age < 65)      | True if both |
+   | or       | At least one true    | (income > 50000) or (savings > 100000) | True if one |
+   | not      | Reverse truth        | not (age < 18)                 | True if adult |
 
-   - **Strings (str)** – text  
-     ```python
-     name = "Waseem"
-     city = 'Karachi'                # single or double quotes
-     message = """Multi-line
-     string for longer text"""
-     print(name, type(name))
-     ```
+   Example:
+   ```python
+   income = 60000
+   experience = 2
+   eligible = (income > 50000) and (experience >= 1)
+   print("Eligible for loan:", eligible)
+   ```
 
-   - **Booleans (bool)** – True or False  
-     ```python
-     is_student = True
-     has_job = False
-     print(is_student, type(is_student))   # <class 'bool'>
-     ```
+4. **if / elif / else Statements – Decision Making**  
+   Syntax reminder (show indentation matters!):
+   ```python
+   if condition:
+       # code runs if True
+   elif another_condition:    # optional, can have many
+       # code runs if first false and this true
+   else:                      # optional
+       # code runs if all above false
+   ```
 
-   - `type()` function – super useful for debugging.
+   **Example 1: Simple Age Checker**
+   ```python
+   age = int(input("Enter your age: "))
+   
+   if age < 13:
+       print("You're a kid – enjoy cartoons!")
+   elif age < 20:
+       print("Teenager – focus on studies!")
+   elif age < 60:
+       print("Adult – time to build your career!")
+   else:
+       print("Senior – wisdom era!")
+   ```
 
-4. **Basic Operations – Hands-On Coding**  
+   **Example 2: Grade Calculator**
+   ```python
+   marks = float(input("Enter your marks (0-100): "))
+   
+   if marks >= 90:
+       grade = "A+"
+   elif marks >= 80:
+       grade = "A"
+   elif marks >= 70:
+       grade = "B"
+   elif marks >= 60:
+       grade = "C"
+   elif marks >= 50:
+       grade = "D"
+   else:
+       grade = "F"
+       print("Better luck next time!")
+   
+   print(f"Your grade: {grade}")
+   ```
 
-   - **Arithmetic Operations** (with int/float)  
-     ```python
-     a = 10
-     b = 3
-     
-     print(a + b)   # 13    Addition
-     print(a - b)   # 7     Subtraction
-     print(a * b)   # 30    Multiplication
-     print(a / b)   # 3.333 Division (always float)
-     print(a // b)  # 3     Floor division (integer result)
-     print(a % b)   # 1     Modulus (remainder)
-     print(a ** b)  # 1000  Exponent (10^3)
-     ```
+   **Example 3: Using and/or**
+   ```python
+   temperature = 35
+   is_raining = False
+   
+   if temperature > 30 and not is_raining:
+       print("Perfect weather for cricket!")
+   elif temperature > 30 and is_raining:
+       print("Too hot and rainy – indoor day")
+   else:
+       print("Good weather – go out!")
+   ```
 
-   - **String Operations**  
-     ```python
-     first_name = "Ali"
-     last_name = "Khan"
-     full_name = first_name + " " + last_name   # Concatenation
-     print(full_name)                           # Ali Khan
-     
-     greeting = "Hello " * 3
-     print(greeting)                            # Hello Hello Hello 
-     
-     city = "lahore"
-     print(city.upper())                        # LAHORE
-     print(city.capitalize())                   # Lahore
-     ```
-
-   - **Type Conversion (Casting)** – Common source of bugs  
-     ```python
-     age = 25
-     print("My age is " + str(age))              # Convert int to str
-     
-     user_input = "30"
-     future_age = int(user_input) + 5
-     print("In 5 years:", future_age)
-     
-     # Dangerous – will crash if not number:
-     # int("hello") → ValueError
-     ```
-
-5. **Mini Project Simple Budget Calculator**  
-   Let’s build it live together:
+5. **Nested Conditions + Mini Project: Smart Discount Calculator**  
+   Let’s build a practical e-commerce discount system (like Daraz/Amazon sales):
 
    ```python
-   print("🧮 Simple Monthly Budget Calculator\n")
+   print("🛒 Smart E-Commerce Discount Calculator\n")
    
-   income = float(input("Enter your monthly income (PKR): "))
-   rent = float(input("Rent/House expense: "))
-   food = float(input("Food expense: "))
-   transport = float(input("Transport: "))
-   other = float(input("Other expenses: "))
+   amount = float(input("Enter your cart amount (PKR): "))
+   is_prime = input("Are you a Prime/VIP member? (yes/no): ").strip().lower() == "yes"
+   coupon = input("Do you have a coupon code? (yes/no): ").strip().lower() == "yes"
    
-   total_expenses = rent + food + transport + other
-   savings = income - total_expenses
+   discount = 0
    
-   print("\n📊 Summary:")
-   print(f"Total Income:    PKR {income}")
-   print(f"Total Expenses:  PKR {total_expenses}")
-   print(f"Savings:         PKR {savings}")
-   
-   if savings > 0:
-       print("✅ Great! You're saving money.")
-   elif savings == 0:
-       print("⚠️  Break even – no savings.")
+   if amount >= 5000:
+       discount += 10  # 10% base for big order
+       if is_prime:
+           discount += 15  # extra for prime
+           if coupon:
+               discount += 20  # max discount
+       elif coupon:
+           discount += 10
+   elif amount >= 2000:
+       discount = 5
+       if coupon:
+           discount += 10
    else:
-       print("❌ Overspending – plan better next month!")
-   ```
+       print("Add more items to get discount!")
    
-#### Homework for Day 3
-1. Run all examples from today in your VS Code.
-2. Build an improved version of the Budget Calculator:
-   - Add at least two more expense categories.
-   - Calculate and show savings percentage: `(savings / income) * 100`
-   - Add a motivational message based on savings percentage.
-3. Comment “Day 3 Done ✅” with a screenshot of your improved calculator output.
-4. (Bonus): Make a small script that converts PKR to USD (use fixed rate 1 USD = 278 PKR).
+   final_amount = amount - (amount * discount / 100)
+   
+   print(f"\n🎉 Original: PKR {amount}")
+   print(f"   Discount Applied: {discount}%")
+   print(f"   Final Amount: PKR {final_amount:.2f}")
+   
+   if discount > 0:
+       savings = amount - final_amount
+       print(f"   You saved: PKR {savings:.2f} – Great deal!")
+   ```
 
+6. **Common Mistakes to Avoid**  
+   - Forgetting colon `:` after if/elif/else  
+   - Wrong indentation  
+   - Using `=` instead of `==`  
+   - Not handling user input properly (we’ll improve with error handling later)
 
+#### Homework for Day 4
+1. Run all examples from today.
+2. Build an enhanced version of the Discount Calculator:
+   - Add festival bonus: If user types "eid" or "diwali" as occasion, give extra 10% discount.
+   - Add free shipping if final amount > 3000.
+   - Show a fun message like "Super Saver!" if total discount > 30%.
+3. Comment “Day 4 Done ✅” with screenshot of your enhanced calculator (at least two different scenarios).
+4. (Bonus): Create a simple BMI calculator with health advice based on ranges.
