@@ -1,185 +1,207 @@
-### Day 12: Modules, Packages & Organizing Large Projects (Code Like a Professional Developer)
+### Day 13: Object-Oriented Programming (OOP) Basics – Classes, Objects, __init__ & Attributes
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 11 + shoutouts to homework (persistent contact books that save/load from JSON/CSV, daily journals).  
-- **5-25 mins**: What are modules? Importing (import, from...import, aliases), built-in modules demo.  
-- **25-45 mins**: Creating your own modules + intro to packages (__init__.py, relative imports).  
-- **45-55 mins**: Live project: Split Contact Book into multiple modules (utils.py, storage.py, main.py).  
-- **55-60 mins**: Q&A, best practices, homework.
+- **0-5 mins**: Welcome + recap Day 12 + shoutouts to homework (refactored contact books with packages, cricket stats packages).  
+- **5-20 mins**: Why OOP? Introduction to classes and objects (real-world analogy).  
+- **20-45 mins**: Defining classes, __init__, instance attributes, methods, creating objects.  
+- **45-55 mins**: Live project: Convert Contact Book to OOP (Contact class + ContactManager class).  
+- **55-60 mins**: Q&A, common mistakes, homework.
 
 
 1. **Welcome & Recap**  
-   - "Assalam-o-Alaikum everyone! Day 12 – we're now organizing code like real software engineers!  
-   - Yesterday file handling made our apps truly useful – persistent contact books, journals that remember everything after restart. Mind-blowing progress!  
-   - Today: Modules and Packages. As our agentic AI projects grow (hundreds/thousands of lines), putting everything in one file becomes chaos. Modules let us split code logically, reuse across projects, and collaborate easily."
+   - "Assalam-o-Alaikum everyone! Day 13 – Alhamdulillah we're almost two weeks in and your code is already looking professional!  
+   - Yesterday modules and packages turned our messy scripts into clean, organized projects. Amazing folder structures, reusable storage/ui modules – this is exactly how real Python projects (Django, Flask, LangChain agents) are built!  
+   - Today: We start Object-Oriented Programming (OOP). OOP is the foundation of almost all modern Python code – web frameworks, data science libraries, AI tools. It lets us model real-world entities (like a Contact, Player, AI Agent) naturally and write cleaner, more maintainable code."
 
-2. **What is a Module? + Importing Basics**  
-   New project folder: `day12_modules_demo`
+2. **Why OOP? Real-World Analogy (10 mins)**  
+   - Procedural code (what we’ve done so far): Good for small scripts, but data and functions are separate → hard to manage as project grows.  
+   - OOP: Groups data + behavior together into "objects" – just like real life.
 
-   - "A module is simply a Python file (.py) containing functions, classes, variables."  
-   - Built-in modules example:
+   - Think of a **Cricketer** in real life:
+     - Properties (data): name, age, runs, average
+     - Behaviors (actions): bat(), bowl(), field(), calculate_average()
+   - In OOP, we create a blueprint (class) called `Cricketer`, then make actual players (objects) like babar = Cricketer("Babar Azam", 30)
 
+   Benefits:
+   - Reusability
+   - Easier maintenance
+   - Natural modeling
+   - Used in Flask/Django models, LangChain agents, Pygame games, etc.
+
+3. **Defining a Class & Creating Objects**  
+   New folder: `day13_oop_basics`  
+   File: `day13_classes.py`
+
+   **Basic Class Syntax**
    ```python
-   # day12_builtins.py
-   import random
-   import math
-   import datetime
-   import os
+   class Cricketer:        # class name – PascalCase
+       pass                # empty class for now
    
-   print(random.randint(1, 100))                    # random number
-   print(math.pi)                                   # 3.14159...
-   print(math.sqrt(16))                             # 4.0
+   # Create objects (instances)
+   player1 = Cricketer()
+   player2 = Cricketer()
    
-   today = datetime.date.today()
-   print("Today:", today)
-   
-   print("Current folder:", os.getcwd())
-   print("Files here:", os.listdir("."))
+   print(player1)          # <__main__.Cricketer object at 0x...>
+   print(player2)          # different memory address
    ```
 
-   - Different import styles:
-     ```python
-     from random import randint, choice
-     from math import pi as MATH_PI
-     from datetime import datetime as dt
-   
-     print(randint(1, 6))                  # dice roll
-     print(MATH_PI)
-     print(dt.now())
-     ```
-
-   - Useful built-in modules we’ll use a lot:
-     | Module       | Use Case                              |
-     |--------------|---------------------------------------|
-     | random       | Simulations, games, agent decisions   |
-     | math         | Calculations                          |
-     | datetime     | Timestamps, scheduling                |
-     | os           | File/folder operations                |
-     | sys          | Command-line args, exit               |
-     | json         | Already used – data storage           |
-     | itertools    | Advanced looping (later)              |
-     | collections  | Advanced data structures              |
-
-3. **Creating Your Own Modules**  
-   Create multiple files in the same folder.
-
-   **File 1: utils.py** (helper functions)
+   **Adding Attributes (Data)**
    ```python
-   # utils.py
-   def print_header(title):
-       print("\n" + "=" * 50)
-       print(title.center(50))
-       print("=" * 50)
+   class Cricketer:
+       pass
    
-   def get_valid_input(prompt, type_func=int):
-       while True:
-           try:
-               return type_func(input(prompt))
-           except ValueError:
-               print("❌ Invalid input – try again.")
+   babar = Cricketer()
+   babar.name = "Babar Azam"      # instance attribute
+   babar.age = 30
+   babar.runs = 5000
+   
+   rizwan = Cricketer()
+   rizwan.name = "Mohammad Rizwan"
+   rizwan.age = 32
+   rizwan.runs = 3000
+   
+   print(f"{babar.name} has {babar.runs} runs")
    ```
 
-   **File 2: main.py** (uses the module)
+   Problem: We repeat this for every player → use `__init__`
+
+   **The __init__ Method – Constructor**
    ```python
-   # main.py
-   import utils
-   # or: from utils import print_header, get_valid_input
+   class Cricketer:
+       def __init__(self, name, age, runs=0):   # called automatically
+           self.name = name         # instance attribute
+           self.age = age
+           self.runs = runs
+           self.average = 0.0       # default
    
-   utils.print_header("My Agentic App")
+   # Create objects – much cleaner!
+   babar = Cricketer("Babar Azam", 30, 5000)
+   rizwan = Cricketer("Mohammad Rizwan", 32, 3000)
    
-   age = utils.get_valid_input("Enter your age: ")
-   print(f"You are {age} years old!")
+   print(babar.name, babar.runs)
    ```
 
-   Run `main.py` live – show how clean separation is.
+   - `self`: Refers to the current object (required as first parameter)
 
-   - If module not found → check same folder or PYTHONPATH.
-
-4. **Packages – Grouping Related Modules (10 mins)**  
-   - Package = folder with modules + `__init__.py` file (can be empty in Python 3.3+)
-
-   Folder structure:
-   ```
-   contact_book_package/
-   ├── __init__.py
-   ├── storage.py          # file handling functions
-   ├── ui.py               # display functions
-   └── operations.py       # add/delete/update logic
-   ```
-
-   **Example: storage.py**
+4. **Adding Methods (Behaviors)**  
    ```python
-   # contact_book_package/storage.py
-   import json
-   import os
+   class Cricketer:
+       def __init__(self, name, age, runs=0, matches=0):
+           self.name = name
+           self.age = age
+           self.runs = runs
+           self.matches = matches
    
-   FILE_PATH = "data/contacts.json"
+       def display_info(self):                     # method
+           print(f"Player: {self.name}")
+           print(f"Age: {self.age}")
+           print(f"Runs: {self.runs}")
+           if self.matches > 0:
+               avg = self.runs / self.matches
+               print(f"Average: {avg:.2f}")
+           else:
+               print("Average: N/A")
+       
+       def add_runs(self, new_runs):               # modify data
+           self.runs += new_runs
+           self.matches += 1
+           print(f"{self.name} scored {new_runs} runs!")
    
-   def load_contacts():
-       if os.path.exists(FILE_PATH):
-           with open(FILE_PATH, "r") as f:
-               return json.load(f)
-       return {}
+   # Usage
+   shaheen = Cricketer("Shaheen Afridi", 25, matches=50)
+   shaheen.display_info()
    
-   def save_contacts(contacts):
-       os.makedirs("data", exist_ok=True)
-       with open(FILE_PATH, "w") as f:
-           json.dump(contacts, f, indent=4)
+   shaheen.add_runs(5)        # wicket maiden or something :)
+   shaheen.display_info()
    ```
 
-   **In main.py (outside package)**
+   - Methods always take `self` as first parameter
+
+5. **Live Project: OOP Contact Book**  
+   Refactor our contact book using classes:
+
+   **File: contact.py**
    ```python
-   from contact_book_package import storage
-   # or: from contact_book_package.storage import load_contacts
+   class Contact:
+       def __init__(self, name, phone, email="N/A"):
+           self.name = name.capitalize()
+           self.phone = phone
+           self.email = email
    
-   contacts = storage.load_contacts()
-   print("Loaded contacts:", contacts)
+       def display(self):
+           print(f"\n📇 {self.name}")
+           print(f"   Phone: {self.phone}")
+           print(f"   Email: {self.email}")
+   
+       def update_phone(self, new_phone):
+           self.phone = new_phone
+           print("✅ Phone updated!")
+   
+   
+   class ContactManager:
+       def __init__(self):
+           self.contacts = {}    # name → Contact object
+   
+       def add_contact(self, name, phone, email="N/A"):
+           if name in self.contacts:
+               print("❌ Contact already exists!")
+           else:
+               self.contacts[name] = Contact(name, phone, email)
+               print("✅ Contact added!")
+       
+       def view_all(self):
+           if not self.contacts:
+               print("No contacts yet!")
+               return
+           print(f"\n📋 Total Contacts: {len(self.contacts)}")
+           for contact in self.contacts.values():
+               contact.display()
+       
+       def search(self, name):
+           name = name.capitalize()
+           if name in self.contacts:
+               self.contacts[name].display()
+           else:
+               print("❌ Not found!")
    ```
 
-   - `__init__.py` can expose functions:
-     ```python
-     # __init__.py
-     from .storage import load_contacts, save_contacts
-     from .operations import add_contact
-     ```
-
-     Then: `from contact_book_package import load_contacts`
-
-5. **Refactor Persistent Contact Book into Modules/Package**  
-   Create proper structure:
-
-   ```
-   contact_book/
-   ├── main.py
-   ├── data/contacts.json
-   └── contact_manager/
-       ├── __init__.py
-       ├── storage.py      # load/save
-       ├── ui.py           # print menus, headers
-       └── operations.py   # add/search/delete
+   **File: main.py**
+   ```python
+   from contact import ContactManager
+   
+   manager = ContactManager()
+   
+   manager.add_contact("Ali", "03001234567", "ali@example.com")
+   manager.add_contact("Sara", "03331234567")
+   
+   manager.view_all()
+   manager.search("ali")
    ```
 
-   - Move functions to appropriate files.
-   - Import and run from main.py.
-   - Demonstrate how easy it is to reuse `storage.py` in another project.
+#### Key OOP Terms Quick Summary (Show on Screen)
+| Term              | Meaning                                      |
+|-------------------|----------------------------------------------|
+| Class             | Blueprint/template                                   |
+| Object/Instance   | Actual created entity from class             |
+| Attribute         | Data/variable inside object                  |
+| Method            | Function inside class                        |
+| self              | Reference to current object                  |
+| __init__          | Constructor – runs on object creation        |
 
-   Result: Clean, scalable, professional code base.
+#### Common Mistakes
+- Forgetting `self` as first parameter in methods.  
+- Forgetting to use `self.` when accessing attributes inside class.  
+- Creating attributes outside __init__ inconsistently.
 
-#### Best Practices
-- One module = one responsibility (Single Responsibility Principle).  
-- Name modules lowercase (no capitals).  
-- Use meaningful names: `data_handler.py` not `stuff.py`.  
-- Add docstrings to modules too.  
-- Never use `from module import *` in production (pollutes namespace).
-
-#### Homework for Day 12
-1. Run all examples – create utils.py and use it in a small script.
-2. Fully refactor your persistent Contact Book into a proper package:
-   - At least 3 modules: storage, ui, operations.
-   - main.py only handles menu loop and calls package functions.
-   - Add a header using ui module.
-3. Bonus Project: Create a "Cricket Stats Package":
-   - Modules for player data, calculations (average, strike rate), display.
-   - Load/save player stats from JSON.
-4. Comment “Day 12 Done ✅” with screenshot of your folder structure + running refactored app.
-5. (Advanced Bonus): Add a `config.py` module with settings (file paths, constants).
+#### Homework for Day 13
+1. Run all examples – create Cricketer and Contact classes.
+2. Convert your persistent Contact Book to full OOP:
+   - Contact class (with attributes + methods like update, display).
+   - ContactManager class (with add, delete, search, save/load using previous file handling).
+   - Keep storage in separate module if you want extra credit.
+3. Bonus Project: Create a `BankAccount` class:
+   - Attributes: account_number, holder_name, balance
+   - Methods: deposit(), withdraw(), check_balance(), transfer(to_account, amount)
+   - Create multiple accounts and test transfers.
+4. Comment “Day 13 Done ✅” with screenshot of your OOP Contact Book running (show at least 2 contacts).
+5. (Advanced Bonus): Add a `Player` class for cricket with inheritance teaser (Batsman and Bowler classes coming soon).
