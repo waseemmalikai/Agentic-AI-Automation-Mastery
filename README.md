@@ -1,163 +1,151 @@
-### Day 4: Control Flow – Conditional Statements (if, elif, else) & Comparison Operators
+### Day 5: Loops in Python – while and for (Repeating Tasks Like an Automation Bot)
 
-**Live Session Timings (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 3 + shoutouts to homework (budget calculator screenshots – highlight creative ones).  
-- **5-20 mins**: Theory – Comparison operators + logical operators.  
-- **20-45 mins**: if / elif / else deep dive with live examples.  
-- **45-55 mins**: Nested conditions + mini project.  
-- **55-60 mins**: Q&A, common errors, homework.
-
+**Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
+- **0-5 mins**: Welcome + recap Day 4 + shoutouts to homework (discount calculator enhancements – especially festival bonuses and free shipping).  
+- **5-20 mins**: Introduction to loops + while loop deep dive.  
+- **20-40 mins**: for loop + range() mastery with examples.  
+- **40-55 mins**: Loop control (break, continue, else) + live mini project.  
+- **55-60 mins**: Q&A, common pitfalls, homework.
 
 1. **Welcome & Recap (5 mins)**  
-   - "Assalam-o-Alaikum everyone!  
-   - Yesterday we mastered variables, data types, and operations. Many of you built awesome budget calculators with percentages and motivational messages – fantastic work!  
-   - Today: We make our programs SMART. We teach Python how to make decisions using conditional statements – the brain of every agent we'll build later."
+   - "Assalam-o-Alaikum everyone! Day 5 – we're building momentum!  
+   - Yesterday we made our programs intelligent with if/elif/else. So many creative discount calculators – Eid/Diwali specials, free shipping, super saver messages – you guys are already thinking like developers!  
+   - Today: We teach Python to REPEAT tasks automatically. Loops are the heart of automation – think scraping prices daily, sending reminders, or processing 1000 job applications. This is where real agent power begins."
 
-2. **Comparison Operators – The Foundation of Decisions**  
-   Show in new file: `day4_conditions.py`
+2. **Why Loops? + Introduction**  
+   - Without loops: You’d have to write the same code 100 times.  
+   - With loops: Tell Python “do this until condition met” or “do this for each item”.  
+   - Two main types:  
+     - `while` → repeat as long as condition is True (like waiting for user input).  
+     - `for` → repeat for each item in a sequence (perfect for lists, ranges).
 
-   | Operator | Meaning              | Example            | Result    |
-   |----------|----------------------|--------------------|-----------|
-   | ==       | Equal to             | 10 == 10           | True      |
-   | !=       | Not equal            | 10 != 5            | True      |
-   | >        | Greater than         | 15 > 10            | True      |
-   | <        | Less than            | 5 < 10             | True      |
-   | >=       | Greater or equal     | 10 >= 10           | True      |
-   | <=       | Less or equal        | 8 <= 10            | True      |
+3. **while Loop – Deep Dive**  
+   New file: `day5_loops.py`
 
-   Live demo:
+   Syntax:
    ```python
-   age = 20
-   print(age == 20)    # True
-   print(age > 18)     # True
-   print(age != 25)    # True
+   while condition:
+       # code to repeat
    ```
 
-   Important: `==` vs `=` (assignment) – most common beginner mistake!
-
-3. **Logical Operators – Combining Conditions**  
-   | Operator | Meaning              | Example                        | Result    |
-   |----------|----------------------|--------------------------------|-----------|
-   | and      | Both true            | (age > 18) and (age < 65)      | True if both |
-   | or       | At least one true    | (income > 50000) or (savings > 100000) | True if one |
-   | not      | Reverse truth        | not (age < 18)                 | True if adult |
-
-   Example:
+   **Example 1: Simple Countdown**
    ```python
-   income = 60000
-   experience = 2
-   eligible = (income > 50000) and (experience >= 1)
-   print("Eligible for loan:", eligible)
+   print("🚀 Countdown to Automation Mastery!")
+   count = 10
+   while count > 0:
+       print(count)
+       count -= 1   # same as count = count - 1
+   print("Blast off! You're now looping like a pro!")
    ```
 
-4. **if / elif / else Statements – Decision Making**  
-   Syntax reminder (show indentation matters!):
+   **Example 2: User Input Until Correct**
    ```python
-   if condition:
-       # code runs if True
-   elif another_condition:    # optional, can have many
-       # code runs if first false and this true
-   else:                      # optional
-       # code runs if all above false
+   secret_password = "agent123"
+   attempt = ""
+   
+   while attempt != secret_password:
+       attempt = input("Enter password to access AI Agent: ")
+       if attempt != secret_password:
+           print("❌ Wrong! Try again.")
+   
+   print("✅ Access granted! Welcome to the Agentic World!")
    ```
 
-   **Example 1: Simple Age Checker**
+   **Example 3: Savings Goal Tracker **
    ```python
-   age = int(input("Enter your age: "))
+   target = float(input("Enter your savings goal (PKR): "))
+   current = 0
+   months = 0
    
-   if age < 13:
-       print("You're a kid – enjoy cartoons!")
-   elif age < 20:
-       print("Teenager – focus on studies!")
-   elif age < 60:
-       print("Adult – time to build your career!")
-   else:
-       print("Senior – wisdom era!")
+   while current < target:
+       monthly_save = float(input(f"Month {months+1} - How much did you save? "))
+       current += monthly_save
+       months += 1
+       print(f"Current savings: PKR {current}")
+   
+   print(f"🎉 Goal achieved in {months} months! Total: PKR {current}")
    ```
 
-   **Example 2: Grade Calculator**
+   Warning: Infinite loops! Show what happens if you forget to update the condition (e.g., remove `count -= 1`).
+
+4. **for Loop + range()**  
+
+   Syntax:
    ```python
-   marks = float(input("Enter your marks (0-100): "))
-   
-   if marks >= 90:
-       grade = "A+"
-   elif marks >= 80:
-       grade = "A"
-   elif marks >= 70:
-       grade = "B"
-   elif marks >= 60:
-       grade = "C"
-   elif marks >= 50:
-       grade = "D"
-   else:
-       grade = "F"
-       print("Better luck next time!")
-   
-   print(f"Your grade: {grade}")
+   for variable in sequence:
+       # code to repeat
    ```
 
-   **Example 3: Using and/or**
+   **range() function** – generates numbers  
    ```python
-   temperature = 35
-   is_raining = False
+   for i in range(5):          # 0 to 4
+       print(i)
    
-   if temperature > 30 and not is_raining:
-       print("Perfect weather for cricket!")
-   elif temperature > 30 and is_raining:
-       print("Too hot and rainy – indoor day")
-   else:
-       print("Good weather – go out!")
+   for i in range(1, 11):      # 1 to 10
+       print(i)
+   
+   for i in range(0, 21, 2):   # step by 2 → even numbers
+       print(i)
+   
+   for i in range(10, 0, -1):  # countdown
+       print(i)
    ```
 
-5. **Nested Conditions + Mini Project: Smart Discount Calculator**  
-   Let’s build a practical e-commerce discount system (like Daraz/Amazon sales):
-
+   **Example: Multiplication Table**
    ```python
-   print("🛒 Smart E-Commerce Discount Calculator\n")
+   number = int(input("Enter number for table: "))
    
-   amount = float(input("Enter your cart amount (PKR): "))
-   is_prime = input("Are you a Prime/VIP member? (yes/no): ").strip().lower() == "yes"
-   coupon = input("Do you have a coupon code? (yes/no): ").strip().lower() == "yes"
-   
-   discount = 0
-   
-   if amount >= 5000:
-       discount += 10  # 10% base for big order
-       if is_prime:
-           discount += 15  # extra for prime
-           if coupon:
-               discount += 20  # max discount
-       elif coupon:
-           discount += 10
-   elif amount >= 2000:
-       discount = 5
-       if coupon:
-           discount += 10
-   else:
-       print("Add more items to get discount!")
-   
-   final_amount = amount - (amount * discount / 100)
-   
-   print(f"\n🎉 Original: PKR {amount}")
-   print(f"   Discount Applied: {discount}%")
-   print(f"   Final Amount: PKR {final_amount:.2f}")
-   
-   if discount > 0:
-       savings = amount - final_amount
-       print(f"   You saved: PKR {savings:.2f} – Great deal!")
+   print(f"\nMultiplication Table of {number}:")
+   for i in range(1, 11):
+       print(f"{number} x {i} = {number * i}")
    ```
 
-6. **Common Mistakes to Avoid**  
-   - Forgetting colon `:` after if/elif/else  
-   - Wrong indentation  
-   - Using `=` instead of `==`  
-   - Not handling user input properly (we’ll improve with error handling later)
+5. **Loop Control Statements + Mini Project**  
 
-#### Homework for Day 4
+   - `break` → exit loop immediately  
+   - `continue` → skip to next iteration  
+   - `else` on loops → runs if no break (rare but useful)
+
+   **Mini Project, Number Guessing Game (Agent Training Simulation)**
+   ```python
+   import random
+   
+   print("🧠 AI Agent Training: Number Guessing Game")
+   print("I'm thinking of a number between 1 and 100.\n")
+   
+   secret = random.randint(1, 100)
+   attempts = 0
+   max_attempts = 7
+   
+   for attempt in range(1, max_attempts + 1):
+       guess = int(input(f"Attempt {attempt}/{max_attempts} - Your guess: "))
+       attempts += 1
+       
+       if guess < secret:
+           print("📈 Too low!")
+       elif guess > secret:
+           print("📉 Too high!")
+       else:
+           print(f"🎉 Correct! You guessed it in {attempts} attempts.")
+           break
+   else:  # only runs if loop completed without break
+       print(f"😞 Game over! The number was {secret}.")
+       print("Better luck next time – agents learn from failure!")
+   ```
+
+   - Run live multiple times. Show how it feels like training an agent.
+
+#### Common Pitfalls
+- Forgetting to increment/decrement in while → infinite loop (Ctrl+C to stop).  
+- Off-by-one errors in range() (range(1,11) is 1 to 10).  
+- Indentation errors.
+
+#### Homework for Day 5
 1. Run all examples from today.
-2. Build an enhanced version of the Discount Calculator:
-   - Add festival bonus: If user types "eid" or "diwali" as occasion, give extra 10% discount.
-   - Add free shipping if final amount > 3000.
-   - Show a fun message like "Super Saver!" if total discount > 30%.
-3. Comment “Day 4 Done ✅” with screenshot of your enhanced calculator (at least two different scenarios).
-4. (Bonus): Create a simple BMI calculator with health advice based on ranges.
+2. Build an enhanced Number Guessing Game:
+   - Add hints like "very close" if within 5 numbers.
+   - Track and show best score (fewest attempts).
+   - Let user play multiple rounds (ask "Play again?").
+3. Alternative project: Create an automatic savings calculator that shows monthly growth until target (using while or for).
+4. Comment “Day 5 Done ✅” with screenshot of your game in action (win and lose scenarios).
+5. (Bonus): Print a pattern like pyramid of stars using nested loops (teaser for tomorrow).
