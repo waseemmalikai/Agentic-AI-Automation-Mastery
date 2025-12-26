@@ -1,68 +1,151 @@
-### Day 2: Python Installation, Environment Setup & Your First Real Python Script
+### Day 3: Python Fundamentals – Variables, Data Types, and Basic Operations
 
-**Live Session Timings (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Quick recap of Day 1 + shoutouts to homework completers .  
-- **5-35 mins**: Step-by-step Python installation & environment setup (with common troubleshooting).  
-- **35-50 mins**: Write and explain your first meaningful Python script 
-- **50-60 mins**: Q&A, debugging help, homework announcement
+**Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
+- **0-5 mins**: Welcome + recap Day 2 + shoutouts to homework (especially screenshots of goal tracker).  
+- **5-20 mins**:  What are variables, naming rules, and basic data types.  
+- **20-45 mins**: Live coding + interactive examples (numbers, strings, booleans).  
+- **45-55 mins**: Basic operations (arithmetic, string concatenation, type conversion).  
+- **55-60 mins**: Q&A, common mistakes, homework.
 
-1. **Welcome Back & Recap**  
-   - "Assalam-o-Alaikum everyone! Welcome to Day 2 of our 100+ day Agentic AI Mastery journey.  
-   - Yesterday we understood what Agentic AI and Automation really mean, and ran our first 'Hello' script.  
-   - Shoutout to everyone who commented their automation idea – I saw ideas like 'automate Upwork proposals', 'track Daraz prices', 'cricket score alerts' – we’ll build all these and more by the end!  
-   - Today: We make sure EVERYONE has Python perfectly set up, and we write our first real script."
 
-2. **Python Installation – Step by Step**  
-   - **Windows Users**:
-     - Go to python.org → Downloads → Latest Python (3.12 or 3.13 as of Dec 2025).
-     - IMPORTANT: Check the box “Add Python to PATH” at the bottom before clicking Install.
-     - After install, open Command Prompt → type `python --version` → should show version.
-     - If not: Reinstall with “Add to PATH” checked.
+1. **Welcome & Quick Recap (5 mins)**  
+   - "Assalam-o-Alaikum ! Day 3 of our Agentic AI Mastery Course – great to see so many of you back!  
+   - Yesterday we nailed Python installation, virtual environments,
+   - Amazing homework submissions! I saw many customized versions with extra advice – keep it up!  
+   - Today: We start actual Python programming. Variables, data types, and operations – the building blocks of every agent we’ll build."
 
-   - **Mac Users**:
-     - python.org installer OR use Homebrew (if comfortable): `brew install python`.
-     - Open Terminal → `python3 --version`.
+2. **What is a Variable? (Theory – 8 mins)**  
+   - "A variable is like a labeled box where you store something (data). You can change what’s inside anytime."  
+   - Example:  
+     ```python
+     name = "Ahmed"        # box labeled 'name' contains "Ahmed"
+     age = 25              # box labeled 'age' contains 25
+     ```  
+   - Rules for naming variables (very important – show common errors):  
+     | Rule                  | Good Example       | Bad Example          | Why Bad?                  |
+     |-----------------------|--------------------|----------------------|---------------------------|
+     | Start with letter or _| user_name          | 1name                | Can't start with number   |
+     | Letters, numbers, _   | total_price_2025   | total-price          | No hyphens                |
+     | Case-sensitive        | Age vs age         |                      | Different variables       |
+     | No Python keywords    | class = 10         | (error)              | 'class' is reserved       |
+     | Meaningful names      | monthly_salary     | ms                   | Hard to read later        |
 
-   - **Linux (Ubuntu/Debian)**:
-     - `sudo apt update && sudo apt install python3 python3-pip python3-venv`.
+   - Best practice: Use snake_case (lowercase with underscores) – standard in Python.
 
-   - **Verification**:
-     - Open terminal/cmd → `python --version` and `pip --version`.
-     - Live demo on your machine.
+3. **Basic Data Types**  
+   Create a new file: `day3_datatypes.py`
 
-   - **Common Issues & Fixes ( Troubleshooting)**:
-     - “python not recognized”: Add to PATH manually.
-     - Multiple versions conflict: Use `py -3` on Windows or `python3` on Mac/Linux.
-
-3. **Install VS Code – The Best Free Editor or Pycharm Community Addition**  
-   - Download from code.visualstudio.com.
-   - Install extensions (live):
-     - Python (by Microsoft)
-     - Pylance
-     - Jupyter (for later notebooks)
-     - Code Runner (optional for quick run)
-   - Open a folder → create `day2.py` file.
-   - Show how to run code: Right-click → Run Python File in Terminal.
-
-4. **Virtual Environments – Why & How (Critical for Mastery)**  
-   -  Projects should not share packages – virtual env keeps everything clean.
-   - Create one:
-     ```bash
-     python -m venv .venv     # create
-     # Windows:
-     .venv\Scripts\activate
-     # Mac/Linux:
-     source .venv/bin/activate
+   - **Integers (int)** – whole numbers  
+     ```python
+     age = 22
+     siblings = 4
+     print(age, type(age))          # <class 'int'>
      ```
-   - Install first package: `pip install requests`.
-   - Deactivate: `deactivate`
 
-   Best Practice: Every project gets its own virtual environment.
+   - **Floats (float)** – decimal numbers  
+     ```python
+     height = 5.9
+     salary = 85000.50
+     print(height, type(height))     # <class 'float'>
+     ```
 
-#### Homework for Day 2
-1. Successfully install Python + VS Code + run the goal tracker script.
-2. Modify the script:
-   - Add your own name and 3 real goals.
-   - Add one more custom advice message.
-3. Take a screenshot of your running script and comment “Day 2 Done ✅” with screenshot/link.
-4. (Bonus): Create a virtual environment and run the script inside it.
+   - **Strings (str)** – text  
+     ```python
+     name = "Waseem"
+     city = 'Karachi'                # single or double quotes
+     message = """Multi-line
+     string for longer text"""
+     print(name, type(name))
+     ```
+
+   - **Booleans (bool)** – True or False  
+     ```python
+     is_student = True
+     has_job = False
+     print(is_student, type(is_student))   # <class 'bool'>
+     ```
+
+   - `type()` function – super useful for debugging.
+
+4. **Basic Operations – Hands-On Coding**  
+
+   - **Arithmetic Operations** (with int/float)  
+     ```python
+     a = 10
+     b = 3
+     
+     print(a + b)   # 13    Addition
+     print(a - b)   # 7     Subtraction
+     print(a * b)   # 30    Multiplication
+     print(a / b)   # 3.333 Division (always float)
+     print(a // b)  # 3     Floor division (integer result)
+     print(a % b)   # 1     Modulus (remainder)
+     print(a ** b)  # 1000  Exponent (10^3)
+     ```
+
+   - **String Operations**  
+     ```python
+     first_name = "Ali"
+     last_name = "Khan"
+     full_name = first_name + " " + last_name   # Concatenation
+     print(full_name)                           # Ali Khan
+     
+     greeting = "Hello " * 3
+     print(greeting)                            # Hello Hello Hello 
+     
+     city = "lahore"
+     print(city.upper())                        # LAHORE
+     print(city.capitalize())                   # Lahore
+     ```
+
+   - **Type Conversion (Casting)** – Common source of bugs  
+     ```python
+     age = 25
+     print("My age is " + str(age))              # Convert int to str
+     
+     user_input = "30"
+     future_age = int(user_input) + 5
+     print("In 5 years:", future_age)
+     
+     # Dangerous – will crash if not number:
+     # int("hello") → ValueError
+     ```
+
+5. **Mini Project Simple Budget Calculator**  
+   Let’s build it live together:
+
+   ```python
+   print("🧮 Simple Monthly Budget Calculator\n")
+   
+   income = float(input("Enter your monthly income (PKR): "))
+   rent = float(input("Rent/House expense: "))
+   food = float(input("Food expense: "))
+   transport = float(input("Transport: "))
+   other = float(input("Other expenses: "))
+   
+   total_expenses = rent + food + transport + other
+   savings = income - total_expenses
+   
+   print("\n📊 Summary:")
+   print(f"Total Income:    PKR {income}")
+   print(f"Total Expenses:  PKR {total_expenses}")
+   print(f"Savings:         PKR {savings}")
+   
+   if savings > 0:
+       print("✅ Great! You're saving money.")
+   elif savings == 0:
+       print("⚠️  Break even – no savings.")
+   else:
+       print("❌ Overspending – plan better next month!")
+   ```
+   
+#### Homework for Day 3
+1. Run all examples from today in your VS Code.
+2. Build an improved version of the Budget Calculator:
+   - Add at least two more expense categories.
+   - Calculate and show savings percentage: `(savings / income) * 100`
+   - Add a motivational message based on savings percentage.
+3. Comment “Day 3 Done ✅” with a screenshot of your improved calculator output.
+4. (Bonus): Make a small script that converts PKR to USD (use fixed rate 1 USD = 278 PKR).
+
+
