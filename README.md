@@ -1,192 +1,191 @@
-### Day 9: Functions in Python – Reusable Code Blocks (The Key to Clean & Professional Code)
+### Day 10: Advanced Functions – Lambda, Recursion, Docstrings & Introduction to Error Handling
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 8 + shoutouts to homework (enhanced contact books with address, reverse search, cricket databases).  
-- **5-25 mins**: What are functions? Defining, calling, parameters vs arguments.  
-- **25-45 mins**: Return statements, default parameters, keyword arguments, variable arguments (*args, **kwargs).  
-- **45-55 mins**: Scope (local vs global) + live mini project refactoring with functions.  
+- **0-5 mins**: Welcome + recap Day 9 + shoutouts to homework (refactored contact books, cricket score calculators with multiple functions).  
+- **5-25 mins**: Lambda functions + higher-order functions (map, filter, sorted).  
+- **25-40 mins**: Docstrings + recursion with examples.  
+- **40-55 mins**: Error handling (try/except/else/finally) + live robust code demo.  
 - **55-60 mins**: Q&A, best practices, homework.
 
+1. **Welcome & Recap**  
+   - "Assalam-o-Alaikum everyone! Day 10 – double digits, mashAllah! We're turning into real Python developers.  
+   - Yesterday functions made our code clean and professional. So many beautifully refactored contact books and cricket calculators – modular, readable, reusable. This is exactly how real agentic AI code is written!  
+   - Today: We level up functions even more – lambda (anonymous functions), recursion (functions calling themselves), proper documentation with docstrings, and most importantly, error handling so our agents don’t crash on bad input."
 
-1. **Welcome & Recap (5 mins)**  
-   - "Assalam-o-Alaikum everyone! Day 9 – we’re officially pros at handling data now!  
-   - Yesterday dictionaries changed everything – amazing contact books with reverse lookup, addresses, export options, and detailed cricket player databases. You’re building real-world apps already!  
-   - Today: We learn FUNCTIONS – the secret to writing clean, reusable, professional code. Without functions, your agentic AI code will become messy and unmanageable. With functions, everything becomes modular, testable, and powerful."
+2. **Lambda Functions – One-Line Anonymous Functions**  
+   New file: `day10_advanced_functions.py`
 
-2. **What is a Function? Why Do We Need It? (8 mins)**  
-   New file: `day9_functions.py`
+   - "Lambda is a small anonymous function – no name, usually one expression."
+   Syntax:
+   ```python
+   lambda parameters: expression
+   ```
 
-   - A function is like a mini-program inside your program. You give it input (ingredients), it does work, and gives back output (dish). 
-   - Without functions → repeat same code (DRY violation – Don’t Repeat Yourself).  
-   - With functions → write once, use anywhere.
+   **Example 1: Simple Lambda**
+   ```python
+   square = lambda x: x ** 2
+   print(square(5))   # 25
+   
+   # Direct use
+   print((lambda x: x ** 2)(7))   # 49
+   ```
 
+   **Example 2: With Multiple Parameters**
+   ```python
+   add = lambda a, b=10: a + b
+   print(add(5))      # 15
+   print(add(5, 20))  # 25
+   ```
+
+   **Real Power: With map(), filter(), sorted()**
+
+   - `map()` – apply function to every item
+     ```python
+     numbers = [1, 2, 3, 4, 5]
+     squares = list(map(lambda x: x ** 2, numbers))
+     print(squares)     # [1, 4, 9, 16, 25]
+     
+     prices_pkr = [5000, 8000, 12000]
+     prices_usd = list(map(lambda p: round(p / 278, 2), prices_pkr))
+     print(prices_usd)
+     ```
+
+   - `filter()` – keep items where function returns True
+     ```python
+     ages = [15, 22, 17, 30, 19]
+     adults = list(filter(lambda age: age >= 18, ages))
+     print(adults)      # [22, 30, 19]
+     ```
+
+   - `sorted()` with key
+     ```python
+     players = [("Babar", 55.5), ("Rizwan", 52.3), ("Shaheen", 20.1)]
+     sorted_by_avg = sorted(players, key=lambda player: player[1], reverse=True)
+     print(sorted_by_avg)
+     # [('Babar', 55.5), ('Rizwan', 52.3), ('Shaheen', 20.1)]
+     ```
+
+3. **Docstrings – Professional Documentation**  
+   - "Triple quotes right after function definition – explains what it does, parameters, return."
+   ```python
+   def calculate_discount(amount, is_prime=False, has_coupon=False):
+       """
+       Calculate final price after applying discounts.
+       
+       Args:
+           amount (float): Cart total in PKR
+           is_prime (bool): Whether customer is Prime member
+           has_coupon (bool): Whether coupon is applied
+       
+       Returns:
+           tuple: (final_price, discount_percentage)
+       """
+       discount = 0
+       # ... logic ...
+       final = amount - (amount * discount / 100)
+       return final, discount
+   
+   # View docstring
+   print(calculate_discount.__doc__)
+   help(calculate_discount)   # shows nicely in interactive
+   ```
+
+   Best practice: Always write docstrings for functions you’ll reuse.
+
+4. **Recursion – Function Calling Itself**  
+   - "Like a loop, but using function calls – useful for problems that break into smaller same problems."
+   
+   **Classic Example: Factorial**
+   ```python
+   def factorial(n):
+       if n == 0 or n == 1:    # base case – MUST have!
+           return 1
+       else:
+           return n * factorial(n - 1)   # recursive call
+   
+   print(factorial(5))   # 120
+   print(factorial(0))   # 1
+   ```
+
+   **Another: Fibonacci**
+   ```python
+   def fib(n):
+       if n <= 1:
+           return n
+       return fib(n-1) + fib(n-2)
+   
+   for i in range(10):
+       print(fib(i), end=" ")   # 0 1 1 2 3 5 8 13 21 34
+   ```
+
+   Warning: Too deep recursion → RecursionError (Python limit ~1000). We’ll optimize later with memoization.
+
+5. **Error Handling – Making Code Robust (try/except) (15 mins)**  
+   - "Real agents deal with bad input, missing files, network issues – they shouldn’t crash!"
+   
    Basic structure:
    ```python
-   def function_name(parameters):
-       # code block
-       # optional return
-       return something
+   try:
+       # risky code
+   except ErrorType:
+       # handle error
+   else:
+       # runs if no error
+   finally:
+       # always runs (cleanup)
    ```
 
-3. **Defining & Calling Functions**  
-
-   **Example 1: Simple Greeting**
+   **Example: Safe Division**
    ```python
-   def greet():
-       print("Assalam-o-Alaikum! Welcome to your AI Agent Course!")
-   
-   # Call the function
-   greet()
-   greet()   # call multiple times
-   ```
-
-   **Example 2: With Parameters**
-   ```python
-   def greet_person(name):
-       print(f"Hello {name}! Ready to build agents today?")
-   
-   greet_person("Ahmed")
-   greet_person("Sara")
-   ```
-
-   **Example 3: Multiple Parameters**
-   ```python
-   def calculate_zakat(wealth, nisab=85000, rate=0.025):
-       if wealth >= nisab:
-           zakat_amount = wealth * rate
-           print(f"Zakat due: PKR {zakat_amount:.2f}")
+   def safe_divide(a, b):
+       try:
+           result = a / b
+       except ZeroDivisionError:
+           print("❌ Cannot divide by zero!")
+           return None
+       except TypeError:
+           print("❌ Please enter numbers only!")
+           return None
        else:
-           print("No Zakat due this year.")
+           return result
+       finally:
+           print("Division attempt completed.")
    
-   calculate_zakat(500000)                    # uses defaults
-   calculate_zakat(1000000, rate=0.025)       # override rate
+   print(safe_divide(10, 2))   # 5.0
+   print(safe_divide(10, 0))   # None
+   print(safe_divide(10, "5")) # None
    ```
 
-   - Parameters (in definition) vs Arguments (when calling)  
-   - Default parameters – very useful!
-
-4. **Return Statement**  
-
+   **Example: Safe Input Conversion**
    ```python
-   def add(a, b):
-       result = a + b
-       return result     # sends value back
+   while True:
+       try:
+           age = int(input("Enter your age: "))
+           if age < 0:
+               raise ValueError("Age cannot be negative!")
+           break
+       except ValueError as e:
+           print(f"Invalid input: {e}. Try again.")
    
-   # or shorter
-   def multiply(x, y):
-       return x * y
-   
-   sum_result = add(10, 20)
-   print("Sum:", sum_result)
-   
-   total = add(5, 3) * multiply(2, 4)
-   print("Combined:", total)   # 64
+   print(f"You are {age} years old.")
    ```
 
-   - Functions without return → return None by default.
+   **Make Yesterday’s Contact Book Robust**
+   Add try/except around input conversions and key access.
 
-   **Real Example: Discount Calculator as Function**
-   ```python
-   def apply_discount(amount, is_prime=False, has_coupon=False):
-       discount = 0
-       if amount >= 5000:
-           discount = 10
-           if is_prime:
-               discount += 15
-           if has_coupon:
-               discount += 10
-       elif amount >= 2000 and has_coupon:
-           discount = 15
-       
-       final = amount - (amount * discount / 100)
-       return final, discount   # return multiple values (as tuple)
-   
-   final_price, disc_percent = apply_discount(8000, is_prime=True, has_coupon=True)
-   print(f"Final Price: PKR {final_price}, Discount: {disc_percent}%")
-   ```
 
-5. **Advanced Arguments: *args and **kwargs (8 mins)**  
+#### Best Practices Summary
+- Use lambda for short, simple functions passed to map/filter/sorted.  
+- Always have base case in recursion.  
+- Write docstrings for reusable functions.  
+- Handle expected errors gracefully – never let program crash on user input.
 
-   ```python
-   def print_items(*args):        # any number of positional args
-       for item in args:
-           print(item)
-   
-   print_items("rice", "oil", "sugar", 5, True)
-   
-   def player_info(**kwargs):     # keyword arguments
-       for key, value in kwargs.items():
-           print(f"{key}: {value}")
-   
-   player_info(name="Babar Azam", runs=5000, average=55.5, team="Pakistan")
-   
-   # Combine everything
-   def super_function(a, b, *args, default=10, **kwargs):
-       print(a, b, args, default, kwargs)
-   
-   super_function(1, 2, 3, 4, 5, extra="hello", mode="advanced")
-   ```
-
-6. **Scope: Local vs Global Variables**  
-
-   ```python
-   x = 100   # global
-   
-   def test():
-       x = 50   # local – different from global
-       print("Inside function:", x)
-   
-   test()
-   print("Outside:", x)   # 100
-   
-   # To modify global
-   y = 200
-   def modify_global():
-       global y
-       y = 300
-   
-   modify_global()
-   print(y)   # 300
-   ```
-
-   Best practice: Avoid global variables – pass as parameters.
-
-7. **Mini Project Refactor Contact Book Using Functions**  
-
-   ```python
-   def add_contact(contacts, name, phone, email="N/A"):
-       contacts[name] = {"phone": phone, "email": email}
-       print(f"✅ {name} added!")
-   
-   def view_all_contacts(contacts):
-       if not contacts:
-           print("No contacts!")
-           return
-       print("\n📋 All Contacts:")
-       for name, info in contacts.items():
-           print(f"   {name}: {info['phone']} ({info['email']})")
-   
-   # Main program
-   contacts = {}
-   add_contact(contacts, "Ali", "03001234567", "ali@example.com")
-   add_contact(contacts, "Sara", "03331234567")
-   view_all_contacts(contacts)
-   ```
-
-#### Best Practices Quick List
-- Function names: snake_case, descriptive (e.g., `calculate_discount` not `cd`)
-- One function = one job
-- Keep functions short (under 30 lines ideally)
-- Use meaningful parameter names
-- Add comments/docstrings (we’ll cover later)
-
-#### Homework for Day 9
-1. Run all examples.
-2. Refactor your Day 8 Contact Book completely using functions:
-   - Separate functions for add, search, update, delete, view.
-   - Main menu in a loop calling these functions.
-3. Bonus Project: Build a "Cricket Score Calculator" with functions:
-   - Functions for calculate_average(runs_list), calculate_strike_rate(runs, balls), etc.
-   - Input player stats and show summary.
-4. Comment “Day 9 Done ✅” with screenshot of your refactored contact book or cricket calculator.
-5. (Advanced Bonus): Write a function that takes *args of numbers and returns mean, median, max, min.
+#### Homework for Day 10
+1. Practice all examples (lambda with map/filter, recursion, error handling).
+2. Enhance your Contact Book or Cricket Calculator:
+   - Add proper docstrings to all functions.
+   - Use lambda for sorting contacts alphabetically or players by average.
+   - Add full error handling (invalid inputs, duplicate names, etc.).
+3. Bonus Project: Create a "Recursive File Size Calculator" concept (explain directory tree) or a safe calculator app with all operations protected.
+4. Comment “Day 10 Done ✅” with screenshot showing error handling in action (e.g., dividing by zero gracefully).
+5. (Advanced Bonus): Write a recursive function to generate all possible combinations of a grocery list under a budget.
