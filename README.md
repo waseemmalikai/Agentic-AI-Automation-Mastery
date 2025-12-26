@@ -1,205 +1,236 @@
-### Day 16: Advanced OOP – Abstract Classes, @property, Dataclasses & Intro to Design Patterns
+### Day 17: More Design Patterns – Observer, Strategy & Introduction to Dependency Injection
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 15 + shoutouts to homework (cricket team hierarchies, captains, bank inheritance).  
-- **5-25 mins**: Abstract Base Classes (ABC) – forcing implementation in subclasses.  
-- **25-40 mins**: @property decorator – getters/setters the Pythonic way + dataclasses for boilerplate reduction.  
-- **40-55 mins**: Intro to Design Patterns – Singleton & Factory with practical examples.  
-- **55-60 mins**: Q&A, when to use what, homework.
-
+- **0-5 mins**: Welcome + recap Day 16 + shoutouts to homework (abstract players, @property averages, singleton team managers, factories, logger singletons).  
+- **5-25 mins**: Observer Pattern – automatic notifications (e.g., score updates to fans).  
+- **25-45 mins**: Strategy Pattern – swappable algorithms (e.g., different batting styles).  
+- **45-55 mins**: Dependency Injection (DI) intro – loose coupling for testable agents.  
+- **55-60 mins**: Q&A, when to use patterns, homework, teaser for Day 18.
 
 1. **Welcome & Recap**  
-   - "Assalam-o-Alaikum everyone! Day 16 – we’re deep into professional Python territory now!  
-   - Yesterday inheritance and polymorphism made our code incredibly reusable. Amazing cricket team systems with Batsmen, Bowlers, All-Rounders, captains, training sessions – you’re building real object hierarchies!  
-   - Today: Advanced OOP tools that make code even cleaner, safer, and more maintainable. We’ll cover Abstract Classes (to enforce design), @property (for smart attributes), dataclasses (less boilerplate), and introduce Design Patterns – reusable solutions used in every major framework."
+   - "Assalam-o-Alaikum everyone! Day 17 – your OOP and design skills are now at an advanced level, mashAllah!  
+   - Yesterday abstract classes, @property, dataclasses, Singleton and Factory made everything cleaner and more professional. Incredible upgrades with calculated averages, singleton loggers, player factories – this is how real-world libraries are built!  
+   - Today: More powerful Design Patterns – Observer (for notifications), Strategy (for flexible behavior), and Dependency Injection (the secret to testable, maintainable agentic systems). These patterns are used everywhere: Flask/Django extensions, LangChain tools, automation frameworks."
 
-2. **Abstract Base Classes (ABC) – Enforcing Contracts**  
-   New folder: `day16_advanced_oop_patterns`  
-   File: `day16_abstract_dataclass.py`
+2. **Observer Pattern – “Subscribe and Get Notified”**  
+   New folder: `day17_patterns_di`  
+   File: `day17_observer_strategy.py`
 
-   - Purpose: Define methods that MUST be implemented in subclasses (like an interface).
+   - Use case: Live cricket score – when score changes, all subscribers (fans, apps, TV) get updated automatically.
+
+   ```python
+   class ScoreBoard:
+       def __init__(self):
+           self._score = 0
+           self._observers = []        # list of observers
+       
+       def attach(self, observer):
+           self._observers.append(observer)
+           print(f"{observer.name} subscribed!")
+       
+       def detach(self, observer):
+           self._observers.remove(observer)
+           print(f"{observer.name} unsubscribed!")
+       
+       def notify(self):
+           for observer in self._observers:
+               observer.update(self._score)
+       
+       @property
+       def score(self):
+           return self._score
+       
+       @score.setter
+       def score(self, new_score):
+           if new_score != self._score:
+               self._score = new_score
+               print(f"\n*** Score updated: {self._score} ***")
+               self.notify()               # notify all observers
+   
+   
+   class Observer:
+       def __init__(self, name):
+           self.name = name
+       
+       def update(self, score):
+           pass                            # to be overridden
+   
+   
+   class Fan(Observer):
+       def update(self, score):
+           print(f"🔔 {self.name}: Pakistan score is now {score}! Go team!")
+   
+   
+   class TVChannel(Observer):
+       def update(self, score):
+           print(f"📺 {self.name}: Live - Pakistan {score}/? | Exciting match!")
+   
+   
+   class MobileApp(Observer):
+       def update(self, score):
+           print(f"📱 {self.name} Notification: Current score {score}")
+   
+   
+   # Usage
+   scoreboard = ScoreBoard()
+   
+   fan1 = Fan("Ahmed from Lahore")
+   fan2 = Fan("Sara from Karachi")
+   geo_news = TVChannel("Geo Super")
+   cricbuzz = MobileApp("CricBuzz")
+   
+   scoreboard.attach(fan1)
+   scoreboard.attach(fan2)
+   scoreboard.attach(geo_news)
+   scoreboard.attach(cricbuzz)
+   
+   scoreboard.score = 50      # boundary!
+   scoreboard.score = 56      # single
+   scoreboard.score = 100     # century!
+   
+   scoreboard.detach(fan2)    # Sara turns off notifications
+   scoreboard.score = 150
+   ```
+
+3. **Strategy Pattern – Swappable Behavior**  
+
+   - Use case: Different batting strategies (defensive, aggressive, T20 power-hitting).
 
    ```python
    from abc import ABC, abstractmethod
    
-   class Player(ABC):                              # Abstract base class
-       def __init__(self, name, age):
-           self.name = name.capitalize()
-           self.age = age
-       
-       def display_info(self):
-           print(f"{self.name}, Age: {self.age}")
-       
-       @abstractmethod                             # MUST be implemented by child
-       def perform_role(self):
-           pass                                     # no implementation here
-   
+   class BattingStrategy(ABC):
        @abstractmethod
-       def train(self):
+       def play_shot(self, balls_faced):
            pass
    
    
-   # This will cause error if instantiated directly
-   # p = Player("test", 20)   # TypeError
-   
-   class Batsman(Player):
-       def __init__(self, name, age, runs=0):
-           super().__init__(name, age)
-           self.runs = runs
-       
-       def perform_role(self):                     # Must implement
-           print(f"{self.name} is batting elegantly!")
-       
-       def train(self):                            # Must implement
-           print(f"{self.name} is practicing cover drives.")
-       
-       def display_info(self):
-           super().display_info()
-           print(f"Runs: {self.runs}")
+   class Defensive(BattingStrategy):
+       def play_shot(self, balls_faced):
+           return "Plays defensively – focuses on survival"
    
    
-   babar = Batsman("babar azam", 30, 5000)
-   babar.display_info()
-   babar.perform_role()
-   babar.train()
-   ```
-
-   - If child forgets to implement abstract method → TypeError at class definition time.  
-   - Great for ensuring all players have `perform_role()`.
-
-3. **@property Decorator – Pythonic Getters/Setters + Validation**  
-
-   ```python
-   class BankAccount:
-       def __init__(self, holder, balance=0):
-           self.holder = holder
-           self._balance = balance               # protected
-   
-       @property                                    # getter
-       def balance(self):
-           print("Balance accessed")
-           return self._balance
-       
-       @balance.setter                              # setter
-       def balance(self, amount):
-           if amount < 0:
-               raise ValueError("Balance cannot be negative!")
-           print("Balance updated")
-           self._balance = amount
-       
-       @balance.deleter
-       def balance(self):
-           print("Balance deleted – account closed")
-           del self._balance
-   
-   
-   acc = BankAccount("Ahmed", 5000)
-   print(acc.balance)           # uses getter – Balance accessed → 5000
-   acc.balance = 10000          # uses setter
-   # acc.balance = -500         # ValueError
-   ```
-
-   - Feels like accessing attribute, but runs code (validation, logging).  
-   - Also @property for read-only.
-
-4. **Dataclasses – Less Boilerplate for Data-Heavy Classes (8 mins)**  
-
-   ```python
-   from dataclasses import dataclass
-   
-   @dataclass
-   class Contact:
-       name: str
-       phone: str
-       email: str = "N/A"                       # default value
-       
-       def __post_init__(self):                 # optional custom logic
-           self.name = self.name.capitalize()
-   
-   # Auto-generates __init__, __repr__, __eq__, etc.
-   c1 = Contact("ali", "03001234567", "ali@example.com")
-   c2 = Contact("sara", "03331234567")
-   
-   print(c1)                    # Contact(name='Ali', phone='03001234567', email='ali@example.com')
-   print(c1 == Contact("ali", "03001234567", "ali@example.com"))  # True
-   ```
-
-   - Perfect for models (contacts, players, API responses).  
-   - Add methods normally.
-
-5. **Design Patterns Intro – Singleton & Factory**  
-
-   **Singleton Pattern** – Only one instance ever exists (e.g., database connection, config)
-
-   ```python
-   class DatabaseConnection:
-       _instance = None                        # class variable
-       
-       def __new__(cls):                       # controls instance creation
-           if cls._instance is None:
-               print("Creating single DB connection...")
-               cls._instance = super().__new__(cls)
-           return cls._instance
-       
-       def __init__(self):
-           # Init runs every time, but we protect
-           if not hasattr(self, "initialized"):
-               self.initialized = True
-               self.connection = "Connected to Agent DB"
-       
-       def query(self, q):
-           print(f"Executing: {q}")
-   
-   
-   db1 = DatabaseConnection()
-   db2 = DatabaseConnection()
-   
-   print(db1 is db2)            # True – same object!
-   db1.query("SELECT * FROM agents")
-   ```
-
-   **Factory Pattern** – Create objects without specifying exact class
-
-   ```python
-   class PlayerFactory:
-       @staticmethod
-       def create_player(player_type, name, age, **kwargs):
-           if player_type.lower() == "batsman":
-               return Batsman(name, age, kwargs.get("runs", 0))
-           elif player_type.lower() == "bowler":
-               return Bowler(name, age, kwargs.get("wickets", 0))
-           elif player_type.lower() == "allrounder":
-               return AllRounder(name, age, 
-                                kwargs.get("runs", 0), 
-                                kwargs.get("wickets", 0))
+   class Aggressive(BattingStrategy):
+       def play_shot(self, balls_faced):
+           if balls_faced > 30:
+               return "Goes aggressive – looking for boundaries!"
            else:
-               raise ValueError("Unknown player type")
+               return "Builds inning carefully"
    
    
-   # Usage – no need to import specific classes
-   player = PlayerFactory.create_player("batsman", "rizwan", 32, runs=3000)
-   player.display_info()
-   player.perform_role()
+   class T20Power(BattingStrategy):
+       def play_shot(self, balls_faced):
+           return f"Power hitting! Attempts six – ball #{balls_faced}"
+   
+   
+   class Batsman:
+       def __init__(self, name, strategy: BattingStrategy):
+           self.name = name
+           self.strategy = strategy          # injected strategy
+           self.runs = 0
+           self.balls = 0
+       
+       def set_strategy(self, new_strategy: BattingStrategy):
+           self.strategy = new_strategy
+           print(f"{self.name} changes to {new_strategy.__class__.__name__} mode!")
+       
+       def face_ball(self):
+           self.balls += 1
+           action = self.strategy.play_shot(self.balls)
+           runs_today = self.balls % 4             # simple simulation
+           self.runs += runs_today
+           print(f"{self.name}: Ball {self.balls} - {action} (+{runs_today} runs)")
+   
+   
+   # Usage
+   rizwan = Batsman("Rizwan", Defensive())
+   rizwan.face_ball()
+   rizwan.face_ball()
+   
+   rizwan.set_strategy(Aggressive())
+   rizwan.face_ball()
+   rizwan.face_ball()
+   
+   rizwan.set_strategy(T20Power())
+   rizwan.face_ball()
    ```
 
-#### When to Use What
-- ABC → when you want to force implementation (interfaces).  
-- @property → when you need validation/logic on attribute access.  
-- Dataclass → for simple data containers (90% of models).  
-- Singleton → for global resources (DB, logger, config).  
-- Factory → when object creation logic is complex or user chooses type.
+   - Strategy is injected and can be changed at runtime → very flexible.
 
-#### Homework for Day 16
-1. Run all examples – play with abstract classes, @property, dataclasses.
-2. Upgrade your Cricket Team system:
-   - Make Player abstract with @abstractmethod for perform_role() and train().
-   - Use dataclass for a lightweight Stats class.
-   - Add @property for calculated fields like batting_average (runs/matches).
-   - Implement Singleton for TeamManager (only one team instance).
-   - Add PlayerFactory to create players from string input (e.g., "batsman,Babar,30,5000").
-3. Bonus Project: Create a simple ATM system:
-   - Use singleton for ATM machine.
-   - Dataclass for Transaction.
-   - @property for balance with validation.
-4. Comment “Day 16 Done ✅” with screenshot showing factory creation or singleton proof (id() same).
-5. (Advanced Bonus): Implement a Logger singleton that writes to file.
+4. **Dependency Injection (DI) – Loose Coupling for Testable Code**  
+
+   - Problem: Hard-coded dependencies make testing hard.
+   - Solution: Pass dependencies from outside.
+
+   ```python
+   # Bad – tight coupling
+   class AgentBad:
+       def __init__(self):
+           self.storage = JSONStorage()           # hard-coded
+   
+   # Good – DI
+   class Storage(ABC):
+       @abstractmethod
+       def save(self, data):
+           pass
+       
+       @abstractmethod
+       def load(self):
+           pass
+   
+   
+   class JSONStorage(Storage):
+       def save(self, data):
+           print(f"Saving to JSON: {data}")
+       
+       def load(self):
+           return {"loaded": "data"}
+   
+   
+   class DatabaseStorage(Storage):
+       def save(self, data):
+           print(f"Saving to DB: {data}")
+       
+       def load(self):
+           return {"from": "database"}
+   
+   
+   class Agent:
+       def __init__(self, storage: Storage):      # injected
+           self.storage = storage
+       
+       def remember(self, info):
+           self.storage.save(info)
+       
+       def recall(self):
+           return self.storage.load()
+   
+   
+   # Usage – easy to switch or mock for testing
+   agent1 = Agent(JSONStorage())
+   agent1.remember("My goal for Day 100")
+   
+   agent2 = Agent(DatabaseStorage())
+   agent2.remember("Production deployment")
+   ```
+
+   - In testing: Pass a fake MockStorage.
+   - This is how LangChain, FastAPI, Django inject services.
+
+#### When to Use These Patterns
+- Observer → real-time updates (scores, stock prices, chat apps).  
+- Strategy → changeable algorithms (payment methods, AI models).  
+- DI → anywhere you want testability and flexibility (almost always in big projects).
+
+#### Homework for Day 17
+1. Run all examples – play with observers, strategies, DI.
+2. Build a Live Cricket Match Simulator:
+   - ScoreBoard with Observer pattern (add Fan, TV, App, and maybe WhatsAppGroup observer).
+   - Batsman with Strategy pattern (switch between Defensive/Aggressive based on wickets fallen).
+   - Use DI to inject different notifiers or storage.
+3. Bonus Project: Simple Chat Agent:
+   - Observer for new messages.
+   - Strategy for different response styles (formal, casual, Urdu).
+   - DI for storage (memory vs file).
+4. Comment “Day 17 Done ✅” with screenshot of score updates notifying multiple observers.
+5. (Advanced Bonus): Implement a Strategy for different bowling types (fast, spin).
