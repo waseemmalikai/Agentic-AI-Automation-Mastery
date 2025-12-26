@@ -1,190 +1,205 @@
-### Day 15: Inheritance & Polymorphism – Building Hierarchies and Reusable OOP Code
+### Day 16: Advanced OOP – Abstract Classes, @property, Dataclasses & Intro to Design Patterns
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 14 + shoutouts to homework (enhanced contact books with validation, class counters, beautiful __str__, bank accounts).  
-- **5-25 mins**: Inheritance basics – single inheritance, super(), method overriding.  
-- **25-45 mins**: Multiple inheritance, polymorphism, isinstance()/issubclass().  
-- **45-55 mins**: Live project: Build a Cricket Team hierarchy (Player → Batsman/Bowler/AllRounder).  
-- **55-60 mins**: Q&A, design tips, homework, teaser for Day 16.
+- **0-5 mins**: Welcome + recap Day 15 + shoutouts to homework (cricket team hierarchies, captains, bank inheritance).  
+- **5-25 mins**: Abstract Base Classes (ABC) – forcing implementation in subclasses.  
+- **25-40 mins**: @property decorator – getters/setters the Pythonic way + dataclasses for boilerplate reduction.  
+- **40-55 mins**: Intro to Design Patterns – Singleton & Factory with practical examples.  
+- **55-60 mins**: Q&A, when to use what, homework.
+
 
 1. **Welcome & Recap**  
-   - "Assalam-o-Alaikum everyone! Day 15 – two weeks completed, mashAllah! Your OOP code is now professional grade.  
-   - Yesterday we polished our classes with class variables, different method types, encapsulation, and special methods. Stunning contact books with validation, nice printing, total counters – and bank accounts that feel real!  
-   - Today: Inheritance and Polymorphism – the most powerful features of OOP. Inheritance lets us build hierarchies (like real life: Player → Batsman), avoid code duplication, and make code super reusable. This is heavily used in frameworks like Django models, LangChain agents, and game development."
+   - "Assalam-o-Alaikum everyone! Day 16 – we’re deep into professional Python territory now!  
+   - Yesterday inheritance and polymorphism made our code incredibly reusable. Amazing cricket team systems with Batsmen, Bowlers, All-Rounders, captains, training sessions – you’re building real object hierarchies!  
+   - Today: Advanced OOP tools that make code even cleaner, safer, and more maintainable. We’ll cover Abstract Classes (to enforce design), @property (for smart attributes), dataclasses (less boilerplate), and introduce Design Patterns – reusable solutions used in every major framework."
 
-2. **Inheritance Basics – “is-a” Relationship (15 mins)**  
-   New folder: `day15_inheritance_polymorphism`  
-   File: `day15_inheritance.py`
+2. **Abstract Base Classes (ABC) – Enforcing Contracts**  
+   New folder: `day16_advanced_oop_patterns`  
+   File: `day16_abstract_dataclass.py`
 
-   - Concept: Child class (subclass) inherits attributes and methods from parent class (superclass).
+   - Purpose: Define methods that MUST be implemented in subclasses (like an interface).
 
    ```python
-   class Player:                                   # Parent/Base class
+   from abc import ABC, abstractmethod
+   
+   class Player(ABC):                              # Abstract base class
        def __init__(self, name, age):
            self.name = name.capitalize()
            self.age = age
        
        def display_info(self):
-           print(f"Player: {self.name}, Age: {self.age}")
+           print(f"{self.name}, Age: {self.age}")
        
+       @abstractmethod                             # MUST be implemented by child
+       def perform_role(self):
+           pass                                     # no implementation here
+   
+       @abstractmethod
        def train(self):
-           print(f"{self.name} is training hard!")
+           pass
    
    
-   class Batsman(Player):                          # Inherits from Player
-       def __init__(self, name, age, runs=0, centuries=0):
-           super().__init__(name, age)             # Call parent __init__
-           self.runs = runs
-           self.centuries = centuries
-       
-       def score_runs(self, runs):
-           self.runs += runs
-           if runs >= 100:
-               self.centuries += 1
-           print(f"{self.name} scored {runs} runs!")
-       
-       def display_info(self):                         # Override
-           super().display_info()                      # Call parent version
-           print(f"Runs: {self.runs}, Centuries: {self.centuries}")
+   # This will cause error if instantiated directly
+   # p = Player("test", 20)   # TypeError
    
-   
-   # Usage
-   babar = Batsman("babar azam", 30, 5000, 15)
-   babar.display_info()
-   babar.train()                   # inherited method
-   babar.score_runs(150)
-   babar.display_info()
-   ```
-
-   Key points:
-   - `super().__init__()` to initialize parent
-   - Method overriding: Child provides its own version
-   - Child can still call parent method with `super()`
-
-3. **More Inheritance Examples + Bowler Class (10 mins)**  
-
-   ```python
-   class Bowler(Player):
-       def __init__(self, name, age, wickets=0):
+   class Batsman(Player):
+       def __init__(self, name, age, runs=0):
            super().__init__(name, age)
-           self.wickets = wickets
+           self.runs = runs
        
-       def take_wicket(self):
-           self.wickets += 1
-           print(f"{self.name} took a wicket! Total: {self.wickets}")
+       def perform_role(self):                     # Must implement
+           print(f"{self.name} is batting elegantly!")
+       
+       def train(self):                            # Must implement
+           print(f"{self.name} is practicing cover drives.")
        
        def display_info(self):
            super().display_info()
-           print(f"Wickets: {self.wickets}")
+           print(f"Runs: {self.runs}")
    
    
-   shaheen = Bowler("shaheen afridi", 25, 200)
-   shaheen.display_info()
-   shaheen.take_wicket()
-   shaheen.train()                 # inherited
+   babar = Batsman("babar azam", 30, 5000)
+   babar.display_info()
+   babar.perform_role()
+   babar.train()
    ```
 
-4. **All-Rounder – Multiple Inheritance**  
-   - Python supports multiple inheritance (carefully!)
+   - If child forgets to implement abstract method → TypeError at class definition time.  
+   - Great for ensuring all players have `perform_role()`.
+
+3. **@property Decorator – Pythonic Getters/Setters + Validation**  
 
    ```python
-   class AllRounder(Batsman, Bowler):               # Inherits from both!
-       def __init__(self, name, age, runs=0, centuries=0, wickets=0):
-           Batsman.__init__(self, name, age, runs, centuries)
-           Bowler.__init__(self, name, age, wickets)
-           # Note: We called both parents explicitly
+   class BankAccount:
+       def __init__(self, holder, balance=0):
+           self.holder = holder
+           self._balance = balance               # protected
+   
+       @property                                    # getter
+       def balance(self):
+           print("Balance accessed")
+           return self._balance
        
-       def display_info(self):
-           Batsman.display_info(self)              # or super() if MRO allows
-           Bowler.display_info(self)               # show both stats
+       @balance.setter                              # setter
+       def balance(self, amount):
+           if amount < 0:
+               raise ValueError("Balance cannot be negative!")
+           print("Balance updated")
+           self._balance = amount
+       
+       @balance.deleter
+       def balance(self):
+           print("Balance deleted – account closed")
+           del self._balance
    
    
-   shadab = AllRounder("shadab khan", 27, 2000, 2, 100)
-   shadab.display_info()
-   shadab.score_runs(80)
-   shadab.take_wicket()
-   shadab.train()
+   acc = BankAccount("Ahmed", 5000)
+   print(acc.balance)           # uses getter – Balance accessed → 5000
+   acc.balance = 10000          # uses setter
+   # acc.balance = -500         # ValueError
    ```
 
-   Mention Method Resolution Order (MRO): `AllRounder.mro()` to see order.
+   - Feels like accessing attribute, but runs code (validation, logging).  
+   - Also @property for read-only.
 
-5. **Polymorphism – “Many Forms”**  
-   - Same method name works differently based on object type
+4. **Dataclasses – Less Boilerplate for Data-Heavy Classes (8 mins)**  
 
    ```python
-   def player_summary(player):                     # works for any Player subclass
-       player.display_info()                       # polymorphic call
+   from dataclasses import dataclass
    
-   players = [
-       Batsman("rizwan", 32, 3000, 5),
-       Bowler("haris rauf", 28, 150),
-       AllRounder("imad wasim", 35, 1500, 1, 80)
-   ]
+   @dataclass
+   class Contact:
+       name: str
+       phone: str
+       email: str = "N/A"                       # default value
+       
+       def __post_init__(self):                 # optional custom logic
+           self.name = self.name.capitalize()
    
-   for p in players:
-       player_summary(p)                           # same function, different output!
-       p.train()                                   # all can train
+   # Auto-generates __init__, __repr__, __eq__, etc.
+   c1 = Contact("ali", "03001234567", "ali@example.com")
+   c2 = Contact("sara", "03331234567")
+   
+   print(c1)                    # Contact(name='Ali', phone='03001234567', email='ali@example.com')
+   print(c1 == Contact("ali", "03001234567", "ali@example.com"))  # True
    ```
 
-   - Built-in checks:
-     ```python
-     print(isinstance(babar, Batsman))      # True
-     print(isinstance(babar, Player))       # True (inheritance chain)
-     print(issubclass(Batsman, Player))     # True
-     ```
+   - Perfect for models (contacts, players, API responses).  
+   - Add methods normally.
 
-6. **Live Project: Cricket Team Management System**  
-   Bring it all together:
+5. **Design Patterns Intro – Singleton & Factory**  
+
+   **Singleton Pattern** – Only one instance ever exists (e.g., database connection, config)
 
    ```python
-   class CricketTeam:
-       def __init__(self, name):
-           self.name = name
-           self.players = []                       # list of Player objects
+   class DatabaseConnection:
+       _instance = None                        # class variable
        
-       def add_player(self, player):
-           self.players.append(player)
-           print(f"{player.name} added to {self.name}")
+       def __new__(cls):                       # controls instance creation
+           if cls._instance is None:
+               print("Creating single DB connection...")
+               cls._instance = super().__new__(cls)
+           return cls._instance
        
-       def team_summary(self):
-           print(f"\n--- {self.name} Team Summary ---")
-           for player in self.players:
-               player.display_info()
-           print(f"Total Players: {len(self.players)}")
+       def __init__(self):
+           # Init runs every time, but we protect
+           if not hasattr(self, "initialized"):
+               self.initialized = True
+               self.connection = "Connected to Agent DB"
+       
+       def query(self, q):
+           print(f"Executing: {q}")
    
    
-   # Create team
-   pakistan = CricketTeam("Pakistan")
+   db1 = DatabaseConnection()
+   db2 = DatabaseConnection()
    
-   pakistan.add_player(babar)
-   pakistan.add_player(shaheen)
-   pakistan.add_player(shadab)
-   
-   pakistan.team_summary()
-   
-   # Polymorphism in action
-   print("\nTraining Session:")
-   for p in pakistan.players:
-       p.train()
+   print(db1 is db2)            # True – same object!
+   db1.query("SELECT * FROM agents")
    ```
 
-   Run live – show hierarchy, polymorphism, team management.
+   **Factory Pattern** – Create objects without specifying exact class
 
-#### OOP Design Tips
-- Favor composition over inheritance when possible (has-a vs is-a).  
-- Keep inheritance depth shallow (2-3 levels max).  
-- Use inheritance for true “is-a” relationships (Batsman is a Player).  
-- Polymorphism makes code flexible – write functions that accept base class.
+   ```python
+   class PlayerFactory:
+       @staticmethod
+       def create_player(player_type, name, age, **kwargs):
+           if player_type.lower() == "batsman":
+               return Batsman(name, age, kwargs.get("runs", 0))
+           elif player_type.lower() == "bowler":
+               return Bowler(name, age, kwargs.get("wickets", 0))
+           elif player_type.lower() == "allrounder":
+               return AllRounder(name, age, 
+                                kwargs.get("runs", 0), 
+                                kwargs.get("wickets", 0))
+           else:
+               raise ValueError("Unknown player type")
+   
+   
+   # Usage – no need to import specific classes
+   player = PlayerFactory.create_player("batsman", "rizwan", 32, runs=3000)
+   player.display_info()
+   player.perform_role()
+   ```
 
-#### Homework for Day 15
-1. Run all examples – create Player hierarchy.
-2. Build a full Cricket Team Management OOP system:
-   - Base Player class.
-   - At least Batsman, Bowler, AllRounder subclasses.
-   - Team class that holds list of players, with methods: add_player, remove_player, team_summary, training_session (calls train on all).
-   - Add a Captain designation (maybe a class variable or separate method).
-3. Bonus Project: Bank system with inheritance:
-   - Base Account → SavingsAccount (with interest), CurrentAccount (with overdraft).
-   - Bank class to manage multiple accounts.
-4. Comment “Day 15 Done ✅” with screenshot of your team summary showing different player types.
-5. (Advanced Bonus): Implement multiple inheritance carefully for a WicketKeeperBatsman class.
+#### When to Use What
+- ABC → when you want to force implementation (interfaces).  
+- @property → when you need validation/logic on attribute access.  
+- Dataclass → for simple data containers (90% of models).  
+- Singleton → for global resources (DB, logger, config).  
+- Factory → when object creation logic is complex or user chooses type.
+
+#### Homework for Day 16
+1. Run all examples – play with abstract classes, @property, dataclasses.
+2. Upgrade your Cricket Team system:
+   - Make Player abstract with @abstractmethod for perform_role() and train().
+   - Use dataclass for a lightweight Stats class.
+   - Add @property for calculated fields like batting_average (runs/matches).
+   - Implement Singleton for TeamManager (only one team instance).
+   - Add PlayerFactory to create players from string input (e.g., "batsman,Babar,30,5000").
+3. Bonus Project: Create a simple ATM system:
+   - Use singleton for ATM machine.
+   - Dataclass for Transaction.
+   - @property for balance with validation.
+4. Comment “Day 16 Done ✅” with screenshot showing factory creation or singleton proof (id() same).
+5. (Advanced Bonus): Implement a Logger singleton that writes to file.
