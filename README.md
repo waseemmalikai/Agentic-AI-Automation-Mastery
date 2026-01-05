@@ -1,61 +1,11 @@
-### Day 6: Nested Loops, Patterns & Introduction to Lists (Python’s Most Important Data Structure)
+### Day 7: Introduction to Lists (Python’s Most Important Data Structure)
 
 **Live Session Plan (9:30 - 10:30 PST / ~9:30 - 10:30 PM PKT/IST)**  
-- **0-5 mins**: Welcome + recap Day 5 + shoutouts to homework (guessing game enhancements & savings calculators).  
-- **5-20 mins**: Nested loops + fun pattern printing (stars, numbers).  
-- **20-45 mins**: Introduction to Lists – creation, indexing, slicing, methods.  
-- **45-55 mins**: Combining loops + lists + live mini project.  
-- **55-60 mins**: Q&A, common mistakes, homework, teaser for Day 7.
 
 1. **Welcome & Recap**  
    - "Assalam-o-Alaikum everyone! Day 6 – we're flying through the basics and getting stronger every day!  
-   - Yesterday loops unlocked automation power. So many creative guessing games – multiple rounds, hints, best scores – you’re already building like pros!  
-   - Today: We go deeper with nested loops (loops inside loops), print beautiful patterns, and finally meet Python Lists – the #1 data structure we'll use in every agent, database, and ML project."
-
-2. **Nested Loops – Loops Inside Loops**  
-   New file: `day6_nested_lists.py`
-
-   - Concept: "Outer loop runs → inner loop runs fully → outer moves to next."  
-   - Simple example:
-     ```python
-     for i in range(1, 4):          # outer: 1,2,3
-         print(f"Outer loop iteration: {i}")
-         for j in range(1, 3):      # inner: 1,2 for each outer
-             print(f"   Inner: {j}")
-     ```
-
-   - **Pattern Printing – Everyone’s Favorite!**  
-     **Pattern 1: Square of Stars**
-     ```python
-     size = 5
-     for i in range(size):
-         for j in range(size):
-             print("*", end=" ")   # end=" " to stay on same line
-         print()                   # new line after row
-     ```
-     Output: 5x5 square of stars.
-
-     **Pattern 2: Right Triangle**
-     ```python
-     n = 6
-     for i in range(1, n+1):        # rows 1 to 6
-         for j in range(i):        # print i stars
-             print("*", end=" ")
-         print()
-     ```
-
-     **Pattern 3: Number Pyramid**
-     ```python
-     n = 5
-     for i in range(1, n+1):
-         # spaces
-         for j in range(n - i):
-             print(" ", end="")
-         # numbers
-         for j in range(1, i+1):
-             print(j, end=" ")
-         print()
-     ```
+   - Yesterday loops unlocked automation power.
+   - Today: we finally meet Python Lists – the #1 data structure we'll use in every agent, database, and ML project."
 
 3. **Introduction to Lists – The Superhero Data Structure**  
 
@@ -165,12 +115,11 @@
 - IndexError: list index out of range.  
 - Using `==` instead of `in` for checking existence.
 
-#### Homework for Day 6
-1. Print at least 3 different patterns (triangle, square, pyramid, diamond).
+#### Homework for Day 7
 2. Build an enhanced Grocery Manager:
    - Add quantity: store as list of lists or dicts (e.g., ["Rice", 5], ["Oil", 2]).
    - Show total estimated cost (assign fake prices).
    - Sort list alphabetically.
 3. Alternative: Create a Cricketer scorecard list and calculate average runs.
-4. Comment “Day 6 Done ✅” with screenshot of your pattern + grocery manager.
+4. Comment “Day 7 Done ✅” with screenshot of your pattern + grocery manager.
 5. (Bonus): Print Floyd's Triangle (1, 2 3, 4 5 6, etc.).
