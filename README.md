@@ -65,7 +65,7 @@
          print(f"{i+1}. {shopping[i]}")
      ```
 
-4. **Mini Project Live Build: Grocery List Manager**  
+4. **Mini Grocery List Manager**  
 
    ```python
    print("🛍️  Smart Grocery List Manager\n")
